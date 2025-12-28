@@ -1,0 +1,104 @@
+:root {
+  --primary: #6366f1;
+  --success: #10b981;
+  --danger: #ef4444;
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: var(--bg-gradient);
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  background: #fff;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  max-width: 550px;
+  width: 100%;
+  text-align: center;
+}
+
+.logo-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border: 2px dashed #e5e7eb;
+  border-radius: 16px;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: 0.3s;
+  margin-bottom: 20px;
+}
+
+.upload-label:hover { border-color: var(--primary); background: #f5f7ff; }
+
+.controls-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn:active { transform: scale(0.96); }
+.btn-secondary { background: #f3f4f6; color: #4b5563; }
+.btn-danger { background: #fee2e2; color: var(--danger); }
+.btn-success { background: var(--success); color: white; }
+.btn-success:disabled { background: #d1d5db; cursor: not-allowed; }
+
+.full-width { grid-column: span 2; }
+
+/* Tooltip */
+.tooltip { position: relative; }
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: 0.3s;
+  font-size: 0.7rem;
+}
+.tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+
+/* Image Preview */
+.image-wrapper {
+  margin-top: 25px;
+  border-radius: 16px;
+  background: #f3f4f6;
+  padding: 8px;
+  overflow: hidden;
+}
+#output { width: 100%; border-radius: 12px; transition: 0.3s; }
+.status-message { margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
+
+@media (max-width: 480px) {
+  .controls-section { grid-template-columns: 1fr; }
+  .full-width { grid-column: span 1; }
+}
