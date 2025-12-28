@@ -70,18 +70,35 @@ async function removeBackground() {
             headers: { 'X-Api-Key': API_KEY },
             body: formData
         });
-        if (!response.ok) throw new Error();
+
+        if (!response.ok) {
+            const errMsg = await response.text();
+            throw new Error(errMsg || 'API Error');
+        }
+
         const blob = await response.blob();
         output.src = URL.createObjectURL(blob);
         notify('🪄 تمت إزالة الخلفية بنجاح');
-    } catch (e) { notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error'); }
-    finally { setBtnState('#removeBgBtn', false, ' إزالة الخلفية', 'fas fa-magic'); }
+    } catch (e) {
+        notify(`❌ خطأ في إزالة الخلفية: ${e.message}`, 'error');
+    } finally {
+        setBtnState('#removeBgBtn', false, ' إزالة الخلفية', 'fas fa-magic');
+    }
 }
 
 downloadBtn.addEventListener('click', () => {
-    const a = document.createElement('a');
-    a.href = output.src;
-    a.download = `QuickTool_${Date.now()}.png`;
-    a.click();
-    notify('📥 تم التحميل');
+    if (!output.src) return notify('❌ لا توجد صورة للتحميل', 'error');
+
+    fetch(output.src)
+        .then(res => res.blob())
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `QuickTool_${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            notify('📥 تم التحميل');
+        })
+        .catch(() => notify('❌ فشل التحميل', 'error'));
 });
