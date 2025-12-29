@@ -125,3 +125,18 @@ body {
     border-radius: 12px;
     transition: 0.3s;
 }
+.controls-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px; /* زيادة المسافة */
+}
+
+.btn {
+    width: 100%;
+    padding: 14px; /* أكبر شوي للهواتف */
+    font-size: 0.95rem; /* أو 1rem للراحة */
+}
+@media (max-width: 480px) {
+  .controls-section { grid-template-columns: 1fr; }
+}
