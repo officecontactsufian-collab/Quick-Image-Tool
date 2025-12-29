@@ -26,7 +26,11 @@ body {
   text-align: center;
 }
 
-.logo-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+.logo-icon { 
+  font-size: 2.5rem; 
+  color: var(--primary); 
+  margin-bottom: 10px; 
+}
 
 .upload-label {
   display: flex;
@@ -40,9 +44,16 @@ body {
   margin-bottom: 20px;
 }
 
-.upload-label:hover { border-color: var(--primary); background: #f5f7ff; }
+.upload-label:hover { 
+  border-color: var(--primary); 
+  background: #f5f7ff; 
+}
 
-.controls-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.controls-section { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 12px; 
+}
 
 .btn {
   width: 100%;
@@ -94,9 +105,25 @@ body {
   background: #f3f4f6;
   padding: 8px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#output { width: 100%; border-radius: 12px; transition: 0.3s; }
-.status-message { margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
+
+#output { 
+  max-width: 100%; 
+  max-height: 500px; 
+  border-radius: 12px; 
+  transition: 0.3s; 
+  display: block;
+}
+
+.status-message { 
+  margin-top: 15px; 
+  font-weight: 600; 
+  font-size: 0.9rem; 
+  word-break: break-word;
+}
 
 @media (max-width: 480px) {
   .controls-section { grid-template-columns: 1fr; }
