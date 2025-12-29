@@ -15,7 +15,8 @@ async function removeBackground() {
 
             const data = await res.json();
             if (res.ok) {
-                output.src = `data:image/png;base64,${data.image}`;
+                console.log(data.image);
+output.src = `data:image/png;base64,${data.image}`;
                 notify('🪄 تمت إزالة الخلفية بنجاح');
             } else {
                 notify(`❌ خطأ: ${data.error}`, 'error');
