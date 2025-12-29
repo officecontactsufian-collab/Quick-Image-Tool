@@ -18,13 +18,12 @@ body {
 
 .container {
   background: #fff;
-  padding: 30px 20px;
+  padding: 40px;
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   max-width: 550px;
   width: 100%;
   text-align: center;
-  box-sizing: border-box;
 }
 
 .logo-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
@@ -32,9 +31,7 @@ body {
 .upload-label {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 25px; 
+  padding: 30px;
   border: 2px dashed #e5e7eb;
   border-radius: 16px;
   cursor: pointer;
@@ -42,7 +39,7 @@ body {
   transition: 0.3s;
   margin-bottom: 20px;
 }
-.upload-label i { font-size: 2rem; margin-bottom: 8px; }
+
 .upload-label:hover { border-color: var(--primary); background: #f5f7ff; }
 
 .controls-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -60,13 +57,11 @@ body {
   gap: 8px;
   transition: 0.2s;
 }
+
 .btn:active { transform: scale(0.96); }
 .btn-secondary { background: #f3f4f6; color: #4b5563; }
-.btn-secondary:hover { background: #e0e0e0; }
 .btn-danger { background: #fee2e2; color: var(--danger); }
-.btn-danger:hover { background: #fecaca; }
 .btn-success { background: var(--success); color: white; }
-.btn-success:hover:not(:disabled) { background: #0f9a6e; }
 .btn-success:disabled { background: #d1d5db; cursor: not-allowed; }
 
 .full-width { grid-column: span 2; }
@@ -100,43 +95,10 @@ body {
   padding: 8px;
   overflow: hidden;
 }
-#output {
-  width: 100%;
-  max-height: 400px;
-  object-fit: contain;
-  border-radius: 12px;
-  transition: 0.3s;
-}
+#output { width: 100%; border-radius: 12px; transition: 0.3s; }
 .status-message { margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
 
 @media (max-width: 480px) {
   .controls-section { grid-template-columns: 1fr; }
   .full-width { grid-column: span 1; }
-  
-  .tooltip .tooltiptext {
-    bottom: 110%;
-    font-size: 0.75rem;
-  }
-}
-#output {
-    width: 100%;
-    max-height: 500px; /* تحدد أقصى ارتفاع */
-    object-fit: contain; /* تحافظ على نسبة العرض والارتفاع */
-    border-radius: 12px;
-    transition: 0.3s;
-}
-.controls-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 20px; /* زيادة المسافة */
-}
-
-.btn {
-    width: 100%;
-    padding: 14px; /* أكبر شوي للهواتف */
-    font-size: 0.95rem; /* أو 1rem للراحة */
-}
-@media (max-width: 480px) {
-  .controls-section { grid-template-columns: 1fr; }
 }
