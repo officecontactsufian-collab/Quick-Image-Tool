@@ -129,19 +129,30 @@ body {
   .controls-section { grid-template-columns: 1fr; }
   .full-width { grid-column: span 1; }
 }
-.footer {
+.footer-center {
+  margin-top: 40px;
+  padding: 30px 10px;
   text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  color: #666;
+  border-top: 1px solid #e5e7eb;
 }
 
-.footer a {
-  color: #2563eb;
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #374151; /* رمادي غامق */
   text-decoration: none;
-  margin: 0 6px;
+  margin: 0 10px;
+  font-size: 14px;
 }
 
-.footer a:hover {
+.footer-links a:hover {
+  color: #111827; /* غامق شوية */
   text-decoration: underline;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #6b7280; /* رمادي فاتح */
 }
