@@ -129,3 +129,19 @@ body {
   .controls-section { grid-template-columns: 1fr; }
   .full-width { grid-column: span 1; }
 }
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.footer a {
+  color: #2563eb;
+  text-decoration: none;
+  margin: 0 6px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
