@@ -2,105 +2,48 @@
 <html lang="ar" dir="rtl">
 <head>
     <!-- Google Tag Manager -->
-    <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];
-    w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-    var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-    f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MKH28BJ7');
-    </script>
-    <!-- End Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MKH28BJ7');</script>
+<!-- End Google Tag Manager -->
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Image Tool</title>
-
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
 </head>
-
 <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
-    <!-- Page Wrapper -->
-    <div class="page-wrapper">
+<main class="container">
+  <header class="tool-header">
+      <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+      <h1>Quick Image Tool</h1>
+      <p>حلول ذكية لتحرير الصور بضغطة زر</p>
+  </header>
 
-        <main class="container">
-            <header class="tool-header">
-                <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-                <h1>Quick Image Tool</h1>
-                <p>حلول ذكية لتحرير الصور بضغطة زر</p>
-            </header>
+  <!-- باقي محتوى الصفحة الرئيسي -->
 
-            <section class="upload-section">
-                <input type="file" id="imageInput" accept="image/*" hidden>
-                <label for="imageInput" class="upload-label">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span>اسحب الصورة هنا أو اضغط للاختيار</span>
-                </label>
-            </section>
+</main>
 
-            <section class="controls-section">
-                <div class="tooltip">
-                    <button class="btn btn-secondary" onclick="resizeImage()">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                        <span>تغيير الحجم</span>
-                    </button>
-                    <span class="tooltiptext">تحويل الأبعاد إلى 800x800 بكسل</span>
-                </div>
+<!-- Footer -->
+<footer class="footer-center">
+    <nav class="footer-links">
+        <a href="index.html">الرئيسية</a>
+        <a href="privacy.html">سياسة الخصوصية</a>
+        <a href="terms.html">شروط الخدمة</a>
+        <a href="contact.html">تواصل معنا</a>
+    </nav>
+    <p class="footer-copy">© 2025 Quick Image Tool – كل الحقوق محفوظة</p>
+</footer>
 
-                <div class="tooltip">
-                    <button class="btn btn-danger" onclick="removeBackground()" id="removeBgBtn">
-                        <i class="fas fa-magic"></i>
-                        <span>إزالة الخلفية</span>
-                    </button>
-                    <span class="tooltiptext">مسح الخلفية بالذكاء الاصطناعي</span>
-                </div>
-
-                <div class="tooltip full-width">
-                    <button class="btn btn-success" id="downloadBtn" disabled>
-                        <i class="fas fa-download"></i>
-                        <span>تحميل بجودة HD</span>
-                    </button>
-                    <span class="tooltiptext">حفظ النتيجة النهائية على جهازك</span>
-                </div>
-            </section>
-
-            <section class="preview-section">
-                <div class="image-wrapper">
-                    <img id="output"
-                         src="https://via.placeholder.com/500x300?text=Preview+Area"
-                         alt="Output Image">
-                </div>
-                <div id="message" class="status-message"></div>
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer-center">
-            <nav class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="tos.html">Terms of Service</a>
-                <a href="contact.html">Contact</a>
-            </nav>
-            <p class="footer-copy">
-                © 2025 Quick Image Tool – All rights reserved
-            </p>
-        </footer>
-
-    </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
