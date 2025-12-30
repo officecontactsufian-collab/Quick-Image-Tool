@@ -7,6 +7,7 @@ const API_KEY = 'gmE4r63VDu3y98NpkNcidxdt';
 
 function setBtnState(selector, isLoading, text, iconClass) {
     const btn = document.querySelector(selector);
+    if (!btn) return;
     const icon = btn.querySelector('i');
     const span = btn.querySelector('span');
     
@@ -46,13 +47,17 @@ async function resizeImage() {
     img.src = URL.createObjectURL(imageInput.files[0]);
     img.onload = async () => {
         const canvas = document.createElement('canvas');
-        canvas.width = 800; canvas.height = 800;
+        canvas.width = 800;
+        canvas.height = 800;
         try {
             await pica().resize(img, canvas);
-            output.src = canvas.toDataURL();
+            output.src = canvas.toDataURL('image/png');
             notify('✨ تم تغيير الحجم بنجاح');
-        } catch (e) { notify('❌ فشل تغيير الحجم', 'error'); }
-        finally { setBtnState('.btn-secondary', false, ' تغيير الحجم', 'fas fa-expand-arrows-alt'); }
+        } catch (e) { 
+            notify('❌ فشل تغيير الحجم', 'error'); 
+        } finally { 
+            setBtnState('.btn-secondary', false, 'تغيير الحجم', 'fas fa-expand-arrows-alt'); 
+        }
     };
 }
 
@@ -70,15 +75,19 @@ async function removeBackground() {
             headers: { 'X-Api-Key': API_KEY },
             body: formData
         });
-        if (!response.ok) throw new Error();
+        if (!response.ok) throw new Error('API error');
         const blob = await response.blob();
         output.src = URL.createObjectURL(blob);
         notify('🪄 تمت إزالة الخلفية بنجاح');
-    } catch (e) { notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error'); }
-    finally { setBtnState('#removeBgBtn', false, ' إزالة الخلفية', 'fas fa-magic'); }
+    } catch (e) { 
+        notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error'); 
+    } finally { 
+        setBtnState('#removeBgBtn', false, 'إزالة الخلفية', 'fas fa-magic'); 
+    }
 }
 
 downloadBtn.addEventListener('click', () => {
+    if (!output.src) return;
     const a = document.createElement('a');
     a.href = output.src;
     a.download = `QuickTool_${Date.now()}.png`;
