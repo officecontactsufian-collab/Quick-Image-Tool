@@ -1,32 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>Contact Us | Quick Image Tool</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا – Quick Image Tool</title>
+    <meta name="description" content="Quick Image Tool: تواصل معنا لأي سؤال أو اقتراح حول أدوات تحرير الصور">
+    <meta name="keywords" content="Quick Image Tool, تواصل, Image Tool, Remove Background, Resize Image">
+    <meta name="author" content="Sofiane Akider">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <main class="container">
+        <header class="tool-header">
+            <h1>تواصل معنا</h1>
+            <p>إذا كان لديك أي سؤال، اقتراح أو مشكلة حول أدواتنا، يمكنك مراسلتنا هنا.</p>
+        </header>
 
-<main class="container">
-  <h1>Contact Us</h1>
+        <form action="mailto:contact@quickimagetool.com" method="post" enctype="text/plain">
+            <label>الاسم:</label><br>
+            <input type="text" name="name" required><br><br>
 
-  <p>
-    If you have any questions, suggestions, or issues related to our tools,
-    feel free to contact us.
-  </p>
+            <label>البريد الإلكتروني:</label><br>
+            <input type="email" name="email" required><br><br>
 
-  <h3>Email</h3>
-  <p>
-    📧 <strong>contact@quickimagetool.com</strong>
-  </p>
+            <label>الرسالة:</label><br>
+            <textarea name="message" rows="5" required></textarea><br><br>
 
-  <p>
-    We usually respond within 24–48 hours.
-  </p>
+            <button type="submit" class="btn btn-success">إرسال الرسالة</button>
+        </form>
 
-  <p><a href="index.html">← Back to Home</a></p>
-</main>
+        <p><a href="index.html">العودة للصفحة الرئيسية ←</a></p>
+    </main>
 
+    <!-- Footer -->
+    <footer class="footer-center">
+        <nav class="footer-links">
+            <a href="index.html">الرئيسية</a>
+            <a href="privacy.html">سياسة الخصوصية</a>
+            <a href="terms.html">شروط الخدمة</a>
+            <a href="contact.html">تواصل معنا</a>
+        </nav>
+        <p class="footer-copy">
+            © 2025 Quick Image Tool – كل الحقوق محفوظة
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
