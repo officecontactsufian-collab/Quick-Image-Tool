@@ -1,10 +1,13 @@
+// العناصر الأساسية
 const imageInput = document.getElementById('imageInput');
 const output = document.getElementById('output');
 const downloadBtn = document.getElementById('downloadBtn');
 const message = document.getElementById('message');
 
+// مفتاح API لإزالة الخلفية
 const API_KEY = 'gmE4r63VDu3y98NpkNcidxdt';
 
+// دالة لتغيير حالة الزر أثناء المعالجة
 function setBtnState(selector, isLoading, text, iconClass) {
     const btn = document.querySelector(selector);
     if (!btn) return;
@@ -13,20 +16,22 @@ function setBtnState(selector, isLoading, text, iconClass) {
     
     if (isLoading) {
         btn.disabled = true;
-        icon.className = 'fas fa-spinner fa-spin';
-        span.innerText = ' جاري المعالجة...';
+        if (icon) icon.className = 'fas fa-spinner fa-spin';
+        if (span) span.innerText = ' جاري المعالجة...';
     } else {
         btn.disabled = false;
-        icon.className = iconClass;
-        span.innerText = text;
+        if (icon) icon.className = iconClass;
+        if (span) span.innerText = text;
     }
 }
 
+// دالة لإظهار الرسائل للمستخدم
 function notify(msg, type = 'success') {
     message.innerText = msg;
     message.style.color = type === 'error' ? '#ef4444' : '#10b981';
 }
 
+// رفع الصورة وعرضها
 imageInput.addEventListener('change', function() {
     if (this.files[0]) {
         const reader = new FileReader();
@@ -39,35 +44,34 @@ imageInput.addEventListener('change', function() {
     }
 });
 
-async function removeBackground() {
+// تغيير حجم الصورة إلى 800x800 باستخدام pica
+async function resizeImage() {
     if (!imageInput.files[0]) return notify('❌ اختر صورة أولاً', 'error');
-    setBtnState('#removeBgBtn', true);
+    setBtnState('.btn-secondary', true, '', '');
 
-    const formData = new FormData();
-    formData.append('image', imageInput.files[0]);
-
-    try {
-        const response = await fetch('/api/remove-bg', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) throw new Error();
-
-        const blob = await response.blob();
-        output.src = URL.createObjectURL(blob);
-        notify('🪄 تمت إزالة الخلفية بنجاح');
-    } catch (e) {
-        notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error');
-    } finally {
-        setBtnState('#removeBgBtn', false, ' إزالة الخلفية', 'fas fa-magic');
-    }
+    const img = new Image();
+    img.src = URL.createObjectURL(imageInput.files[0]);
+    img.onload = async () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 800;
+        try {
+            await pica().resize(img, canvas);
+            output.src = canvas.toDataURL();
+            notify('✨ تم تغيير الحجم بنجاح');
+        } catch (e) {
+            notify('❌ فشل تغيير الحجم', 'error');
+        } finally {
+            setBtnState('.btn-secondary', false, ' تغيير الحجم', 'fas fa-expand-arrows-alt');
+        }
+    };
 }
 
+// إزالة الخلفية باستخدام API
 async function removeBackground() {
     if (!imageInput.files[0]) return notify('❌ اختر صورة أولاً', 'error');
-    setBtnState('#removeBgBtn', true);
-    
+    setBtnState('#removeBgBtn', true, '', '');
+
     const formData = new FormData();
     formData.append('image_file', imageInput.files[0]);
     formData.append('size', 'auto');
@@ -78,19 +82,19 @@ async function removeBackground() {
             headers: { 'X-Api-Key': API_KEY },
             body: formData
         });
-        if (!response.ok) throw new Error('API error');
+        if (!response.ok) throw new Error();
         const blob = await response.blob();
         output.src = URL.createObjectURL(blob);
         notify('🪄 تمت إزالة الخلفية بنجاح');
-    } catch (e) { 
-        notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error'); 
-    } finally { 
-        setBtnState('#removeBgBtn', false, 'إزالة الخلفية', 'fas fa-magic'); 
+    } catch (e) {
+        notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error');
+    } finally {
+        setBtnState('#removeBgBtn', false, ' إزالة الخلفية', 'fas fa-magic');
     }
 }
 
+// تحميل الصورة
 downloadBtn.addEventListener('click', () => {
-    if (!output.src) return;
     const a = document.createElement('a');
     a.href = output.src;
     a.download = `QuickTool_${Date.now()}.png`;
