@@ -2,7 +2,7 @@
   --primary: #6366f1;
   --success: #10b981;
   --danger: #ef4444;
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-gradient: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%);
 }
 
 body {
@@ -11,6 +11,17 @@ body {
   margin: 0;
   min-height: 100vh;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .container {
@@ -105,6 +116,57 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#output { 
+  max-width: 100%; 
+  max-height: 400px; 
+  border-radius: 12px; 
+  transition: 0.3s; 
+  object-fit: contain;
+  display: block;
+}
+
+.status-message { 
+  margin-top: 15px; 
+  font-weight: 600; 
+  font-size: 0.9rem; 
+  word-break: break-word;
+}
+
+@media (max-width: 480px) {
+  .controls-section { grid-template-columns: 1fr; }
+  .full-width { grid-column: span 1; }
+}
+
+/* Footer */
+.footer-center {
+  margin-top: auto;
+  padding: 20px 10px;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #374151; /* رمادي غامق */
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  color: #111827; /* غامق شوية */
+  text-decoration: underline;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: #6b7280; /* رمادي فاتح */
+}  align-items: center;
 }
 
 #output { 
