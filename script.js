@@ -39,26 +39,29 @@ imageInput.addEventListener('change', function() {
     }
 });
 
-async function resizeImage() {
+async function removeBackground() {
     if (!imageInput.files[0]) return notify('❌ اختر صورة أولاً', 'error');
-    setBtnState('.btn-secondary', true);
-    
-    const img = new Image();
-    img.src = URL.createObjectURL(imageInput.files[0]);
-    img.onload = async () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 800;
-        try {
-            await pica().resize(img, canvas);
-            output.src = canvas.toDataURL('image/png');
-            notify('✨ تم تغيير الحجم بنجاح');
-        } catch (e) { 
-            notify('❌ فشل تغيير الحجم', 'error'); 
-        } finally { 
-            setBtnState('.btn-secondary', false, 'تغيير الحجم', 'fas fa-expand-arrows-alt'); 
-        }
-    };
+    setBtnState('#removeBgBtn', true);
+
+    const formData = new FormData();
+    formData.append('image', imageInput.files[0]);
+
+    try {
+        const response = await fetch('/api/remove-bg', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error();
+
+        const blob = await response.blob();
+        output.src = URL.createObjectURL(blob);
+        notify('🪄 تمت إزالة الخلفية بنجاح');
+    } catch (e) {
+        notify('❌ خطأ في الـ API أو الرصيد انتهى', 'error');
+    } finally {
+        setBtnState('#removeBgBtn', false, ' إزالة الخلفية', 'fas fa-magic');
+    }
 }
 
 async function removeBackground() {
