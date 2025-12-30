@@ -2,21 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
     <!-- Google Tag Manager -->
-    <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MKH28BJ7');
-    </script>
+    })(window,document,'script','dataLayer','GTM-MKH28BJ7');</script>
     <!-- End Google Tag Manager -->
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Image Tool</title>
-    <meta name="description" content="Quick Image Tool: حلول ذكية لتحرير الصور، إزالة الخلفية، تغيير الحجم، تحويل الصور بجودة عالية وبضغطة زر.">
-    <meta name="keywords" content="Quick Image Tool, أدوات الصور, إزالة الخلفية, تغيير الحجم, تحويل الصور, Image Tool, AI Background Remover">
-    <meta name="author" content="Sofiane Akider">
+    <title>Quick Image Tool – تحرير الصور أونلاين</title>
+    <meta name="description" content="Quick Image Tool: أدوات تحرير الصور أونلاين، إزالة الخلفية، تغيير الحجم، إضافة علامة مائية والمزيد بسرعة وسهولة.">
+    <meta name="keywords" content="Quick Image Tool, تعديل الصور, إزالة الخلفية, تغيير الحجم, أدوات الصور, تحرير الصور أونلاين">
+    <meta name="author" content="QuickImage Tool">
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,10 +22,8 @@
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <main class="container">
@@ -37,7 +33,6 @@
             <p>حلول ذكية لتحرير الصور بضغطة زر</p>
         </header>
 
-        <!-- Upload Section -->
         <section class="upload-section">
             <input type="file" id="imageInput" accept="image/*" hidden>
             <label for="imageInput" class="upload-label">
@@ -46,7 +41,6 @@
             </label>
         </section>
 
-        <!-- Controls Section -->
         <section class="controls-section">
             <div class="tooltip">
                 <button class="btn btn-secondary" onclick="resizeImage()">
@@ -73,10 +67,9 @@
             </div>
         </section>
 
-        <!-- Preview Section -->
         <section class="preview-section">
             <div class="image-wrapper">
-                <img id="output" src="https://via.placeholder.com/500x300?text=Preview+Area" alt="Output Image">
+                <img id="output" src="https://via.placeholder.com/500x300?text=Preview+Area" alt="Preview Image">
             </div>
             <div id="message" class="status-message"></div>
         </section>
