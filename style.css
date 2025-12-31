@@ -3,6 +3,10 @@
   --success: #10b981;
   --danger: #ef4444;
   --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --text-color: #111827;
+  --footer-color: #6b7280;
+  --footer-link-color: #374151;
+  --footer-link-hover: #111827;
 }
 
 body {
@@ -11,7 +15,7 @@ body {
   margin: 0;
   min-height: 100vh;
   padding: 20px;
-  color: #111827;
+  color: var(--text-color);
 }
 
 .container {
@@ -169,20 +173,20 @@ form button { margin-top: 10px; }
 }
 
 .footer-links a {
-  color: #374151;
+  color: var(--footer-link-color);
   text-decoration: none;
   margin: 0 10px;
   font-size: 14px;
 }
 
 .footer-links a:hover {
-  color: #111827;
+  color: var(--footer-link-hover);
   text-decoration: underline;
 }
 
 .footer-copy {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--footer-color);
 }
 
 @media (max-width: 480px) {
