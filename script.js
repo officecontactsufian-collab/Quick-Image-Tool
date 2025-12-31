@@ -1,13 +1,15 @@
-// Elements
+// العناصر الأساسية
 const imageInput = document.getElementById('imageInput');
 const output = document.getElementById('output');
 const downloadBtn = document.getElementById('downloadBtn');
 const message = document.getElementById('message');
+const resizeBtn = document.getElementById('resizeBtn');
+const removeBgBtn = document.getElementById('removeBgBtn');
 
-// API Key for remove.bg
+// مفتاح API لإزالة الخلفية
 const API_KEY = 'gmE4r63VDu3y98NpkNcidxdt';
 
-// Set button state (loading/normal)
+// دالة لتغيير حالة الزر أثناء المعالجة
 function setBtnState(selector, isLoading, text, iconClass) {
     const btn = document.querySelector(selector);
     if (!btn) return;
@@ -25,21 +27,21 @@ function setBtnState(selector, isLoading, text, iconClass) {
     }
 }
 
-// Show notifications
+// دالة لإظهار الرسائل للمستخدم
 function notify(msg, type = 'success') {
     if (!message) return;
     message.innerText = msg;
     message.style.color = type === 'error' ? '#ef4444' : '#10b981';
 }
 
-// Upload image preview
-if (imageInput) {
+// رفع الصورة وعرضها
+if(imageInput) {
     imageInput.addEventListener('change', function() {
         if (this.files[0]) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 output.src = e.target.result;
-                downloadBtn.disabled = false;
+                if(downloadBtn) downloadBtn.disabled = false;
                 notify('✅ Image uploaded successfully');
             };
             reader.readAsDataURL(this.files[0]);
@@ -47,10 +49,10 @@ if (imageInput) {
     });
 }
 
-// Resize image to 800x800 using pica
+// تغيير حجم الصورة إلى 800x800 باستخدام pica
 async function resizeImage() {
-    if (!imageInput || !imageInput.files[0]) return notify('❌ Please select an image first', 'error');
-    setBtnState('.btn-secondary', true, '', '');
+    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
+    setBtnState('#resizeBtn', true, '', '');
 
     const img = new Image();
     img.src = URL.createObjectURL(imageInput.files[0]);
@@ -65,14 +67,14 @@ async function resizeImage() {
         } catch (e) {
             notify('❌ Failed to resize image', 'error');
         } finally {
-            setBtnState('.btn-secondary', false, ' Resize', 'fas fa-expand-arrows-alt');
+            setBtnState('#resizeBtn', false, ' Resize', 'fas fa-expand-arrows-alt');
         }
     };
 }
 
-// Remove background using API
+// إزالة الخلفية باستخدام API
 async function removeBackground() {
-    if (!imageInput || !imageInput.files[0]) return notify('❌ Please select an image first', 'error');
+    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
     setBtnState('#removeBgBtn', true, '', '');
 
     const formData = new FormData();
@@ -96,9 +98,10 @@ async function removeBackground() {
     }
 }
 
-// Download image
-if (downloadBtn) {
+// تحميل الصورة
+if(downloadBtn) {
     downloadBtn.addEventListener('click', () => {
+        if(!output.src) return notify('❌ No image to download', 'error');
         const a = document.createElement('a');
         a.href = output.src;
         a.download = `QuickTool_${Date.now()}.png`;
@@ -106,3 +109,7 @@ if (downloadBtn) {
         notify('📥 Image downloaded');
     });
 }
+
+// ربط الأزرار
+if(resizeBtn) resizeBtn.addEventListener('click', resizeImage);
+if(removeBgBtn) removeBgBtn.addEventListener('click', removeBackground);
