@@ -14,32 +14,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us | Quick Image Tool</title>
-  <meta name="description" content="Contact the Quick Image Tool team for any inquiries or suggestions regarding our image editing tools.">
+  <meta name="description" content="Contact the Quick Image Tool team for questions, suggestions or issues regarding our online image tools.">
   <meta name="keywords" content="Contact, Quick Image Tool, Image Tools, Support">
-  <meta name="author" content="Soufiyan Iguider">
-
+  <meta name="author" content="SOUFIYAN IGUIDER">
+  <link rel="canonical" href="https://quickimagetools.vercel.app/contact.html">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <!-- Google Tag Manager (noscript) -->
 <noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <main class="container">
   <header class="tool-header">
     <h1>Contact Us</h1>
-    <p>We are happy to assist you with any question or suggestion.</p>
+    <p>We’re happy to hear from you! Send us your questions or suggestions.</p>
   </header>
 
   <section>
-    <p>If you encounter any issues or have suggestions to improve the site, please feel free to contact us.</p>
+    <p>If you encounter any issue using our tools or have suggestions for improving the site, please reach out to us.</p>
 
     <h3>Email</h3>
     <p>📧 <strong>office.contact.sufian@gmail.com</strong></p>
+
     <p>We usually respond within 24–48 hours.</p>
+
+    <h3>Send a Message</h3>
+    <form action="mailto:office.contact.sufian@gmail.com" method="post" enctype="text/plain">
+      <label>Name:</label>
+      <input type="text" name="name" required>
+
+      <label>Email:</label>
+      <input type="email" name="email" required>
+
+      <label>Message:</label>
+      <textarea name="message" rows="5" required></textarea>
+
+      <button type="submit" class="btn btn-success">Send Message</button>
+    </form>
   </section>
 
   <p><a href="index.html">← Back to Home</a></p>
@@ -55,6 +69,6 @@
   <p class="footer-copy">© 2025 Quick Image Tool – All rights reserved</p>
 </footer>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>
