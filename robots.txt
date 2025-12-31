@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://quickimagetools.vercel.app/sitemap.xml
+Sitemap: https://imagenova.vercel.app/sitemap.xml
