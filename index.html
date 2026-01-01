@@ -13,13 +13,12 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imagenova – All-in-One Online Image Tools</title>
-  <meta name="description" content="Resize, compress, convert, remove background and watermark images online instantly.">
-  <meta name="keywords" content="resize image, compress image, convert image, remove background, watermark, online image tools">
+  <title>Imagenova – Online Image Tools</title>
+  <meta name="description" content="Resize, compress, convert, remove background and watermark images online with Imagenova.">
+  <meta name="keywords" content="image resize, compress, convert, remove background, watermark, online tool">
   <meta name="author" content="SOUFIYAN IGUIDER">
   <link rel="canonical" href="https://imagenova.vercel.app/">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
 </head>
 <body>
@@ -29,9 +28,9 @@
 
 <main class="container">
   <header class="tool-header">
-    <div class="logo-icon"><i class="fas fa-image"></i></div>
+    <div class="logo-icon"><i class="fas fa-bolt"></i></div>
     <h1>Imagenova</h1>
-    <p>Resize, compress, convert, remove background and watermark images instantly</p>
+    <p>Resize, Compress, Convert, Remove Background & Watermark Images Online</p>
   </header>
 
   <section class="tool-section">
@@ -42,17 +41,16 @@
 
     <div class="controls-section">
       <button class="btn btn-secondary" id="resizeBtn"><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
-      <button class="btn btn-warning" id="compressBtn"><i class="fas fa-compress"></i><span> Compress</span></button>
-      <button class="btn btn-info" id="convertBtn"><i class="fas fa-file-export"></i><span> Convert</span></button>
-      <button class="btn btn-success" id="removeBgBtn"><i class="fas fa-magic"></i><span> Remove BG</span></button>
+      <button class="btn btn-success" id="compressBtn"><i class="fas fa-compress"></i><span> Compress</span></button>
+      <button class="btn btn-warning" id="convertBtn"><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
       <button class="btn btn-primary" id="watermarkBtn"><i class="fas fa-water"></i><span> Watermark</span></button>
-      <button class="btn btn-danger full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
+      <button class="btn btn-danger" id="removeBgBtn"><i class="fas fa-magic"></i><span> Remove Background</span></button>
+      <button class="btn btn-info full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
     </div>
 
-    <div class="image-wrapper">
-      <img id="output" src="" alt="Image Preview">
+    <div class="image-wrapper" id="previewSection">
+      <img id="output" src="" alt="Preview">
     </div>
-
     <p id="message" class="status-message"></p>
   </section>
 </main>
@@ -64,7 +62,7 @@
     <a href="terms.html">Terms of Service</a>
     <a href="contact.html">Contact</a>
   </nav>
-  <p class="footer-copy">© 2025 Imagenova – All rights reserved</p>
+  <p class="footer-copy">© 2026 Imagenova – All rights reserved</p>
 </footer>
 
 <script src="script.js" defer></script>
