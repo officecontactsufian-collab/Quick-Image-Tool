@@ -1,3 +1,5 @@
 User-agent: *
-Disallow: /API/
+Disallow: /api/
+Allow: /
+
 Sitemap: https://imagenova.vercel.app/sitemap.xml
