@@ -1,66 +1,211 @@
+/* ==========================
+   VARIABLES
+========================== */
 :root {
   --primary: #6366f1;
   --success: #10b981;
   --danger: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --bg-gradient: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --text-dark: #111827;
   --text-light: #6b7280;
   --bg-light: #f3f4f6;
+  --border-radius: 16px;
+  --shadow: 0 20px 60px rgba(0,0,0,0.25);
+  --transition: 0.3s;
+}
+
+/* ==========================
+   GLOBAL STYLES
+========================== */
+* {
+  box-sizing: border-box;
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
   background: var(--bg-gradient);
-  margin:0; padding:20px; min-height:100vh; color:var(--text-dark);
+  margin: 0;
+  min-height: 100vh;
+  padding: 20px;
+  color: var(--text-dark);
 }
+
+a { text-decoration: none; color: var(--primary); }
 
 .container {
-  background:#fff; padding:40px; border-radius:24px; box-shadow:0 20px 60px rgba(0,0,0,0.3);
-  max-width:700px; margin:40px auto; text-align:center;
+  background: #fff;
+  padding: 40px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  max-width: 700px;
+  width: 100%;
+  margin: 40px auto;
+  text-align: center;
 }
 
-.tool-header {margin-bottom:30px;}
-.logo-icon { font-size:2.5rem; color:var(--primary); margin-bottom:10px; }
-h1 {margin:0 0 10px; font-size:2rem;}
-p {margin:5px 0 15px;}
+/* ==========================
+   HEADER
+========================== */
+.tool-header {
+  margin-bottom: 30px;
+}
 
+.logo-icon { 
+  font-size: 3rem; 
+  color: var(--primary); 
+  margin-bottom: 10px; 
+}
+
+h1 { 
+  margin: 0 0 10px; 
+  font-size: 2.2rem;
+}
+
+p { 
+  margin: 5px 0 15px; 
+  font-size: 1rem;
+}
+
+/* ==========================
+   UPLOAD
+========================== */
 .upload-label {
-  display:flex; flex-direction:column; padding:30px; border:2px dashed #e5e7eb; border-radius:16px;
-  cursor:pointer; background:#f9fafb; transition:0.3s; margin-bottom:20px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border: 2px dashed #e5e7eb;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  background: #f9fafb;
+  transition: var(--transition);
+  margin-bottom: 20px;
 }
-.upload-label:hover { border-color: var(--primary); background:#f5f7ff; }
 
-.controls-section { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-.btn { width:100%; padding:12px; border:none; border-radius:12px; font-weight:600;
-  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:0.2s;
+.upload-label:hover { 
+  border-color: var(--primary); 
+  background: #f5f7ff; 
 }
-.btn:active { transform:scale(0.96); }
-.btn-secondary { background:#f3f4f6; color:#4b5563; }
-.btn-danger { background:#fee2e2; color:var(--danger); }
-.btn-success { background:var(--success); color:white; }
-.btn-warning { background:var(--warning); color:white; }
-.btn-primary { background:var(--primary); color:white; }
-.btn-info { background:var(--info); color:white; }
-.btn-success:disabled, .btn-danger:disabled { cursor:not-allowed; }
+
+/* ==========================
+   BUTTONS
+========================== */
+.controls-section { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 12px; 
+  margin-bottom: 20px;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform var(--transition);
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-secondary { background: #f3f4f6; color: #4b5563; }
+.btn-danger { background: #fee2e2; color: var(--danger); }
+.btn-success { background: var(--success); color: white; }
+.btn-success:disabled { background: #d1d5db; cursor: not-allowed; }
 
 .full-width { grid-column: span 2; }
 
-.image-wrapper { margin-top:25px; border-radius:16px; background:var(--bg-light); padding:8px; overflow:hidden;
-  display:flex; justify-content:center; align-items:center;
+/* ==========================
+   IMAGE PREVIEW
+========================== */
+.image-wrapper {
+  margin-top: 25px;
+  border-radius: var(--border-radius);
+  background: var(--bg-light);
+  padding: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#output { max-width:100%; max-height:500px; border-radius:12px; transition:0.3s; display:block; }
-.status-message { margin-top:15px; font-weight:600; font-size:0.9rem; word-break:break-word; }
 
-.footer-center { margin-top:40px; padding:30px 10px; text-align:center; border-top:1px solid #e5e7eb; }
-.footer-links { margin-bottom:10px; }
-.footer-links a { color:#374151; text-decoration:none; margin:0 10px; font-size:14px; }
-.footer-links a:hover { color:var(--text-dark); text-decoration:underline; }
-.footer-copy { font-size:13px; color:var(--text-light); }
-
-@media(max-width:480px){
-  .controls-section { grid-template-columns:1fr; }
-  .full-width { grid-column:span 1; }
-  .container { padding:20px; margin:20px auto; }
+#output { 
+  max-width: 100%; 
+  max-height: 500px; 
+  border-radius: 12px; 
+  transition: var(--transition); 
+  display: block;
 }
+
+/* ==========================
+   STATUS MESSAGE
+========================== */
+.status-message { 
+  margin-top: 15px; 
+  font-weight: 600; 
+  font-size: 0.9rem; 
+  word-break: break-word;
+}
+
+/* ==========================
+   FORM STYLES
+========================== */
+form label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+form input, form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+form button { margin-top: 10px; }
+
+/* ==========================
+   FOOTER
+========================== */
+.footer-center {
+  margin-top: 40px;
+  padding: 30px 10px;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #374151;
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  color: var(--text-dark);
+  text-decoration: underline;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+@media (max-width: 480px) {
+  .controls-section { grid-template-columns: 1fr; }
+  .full-width { grid-column: span 1; }
+  .container { padding: 20px; margin: 20px auto;
