@@ -13,72 +13,49 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Image Tool – Resize, Compress & Remove Background</title>
-  <meta name="description" content="Quick Image Tool is a free online tool to resize images, remove background, compress images, and convert formats.">
-  <meta name="keywords" content="image resize, image compressor, remove background, convert image, online image tools">
+  <title>Imagenova – Online Image Tools</title>
+  <meta name="description" content="Resize, compress, convert, watermark, and remove background from images online with Imagenova.">
+  <meta name="keywords" content="image resize, compress, convert, remove background, watermark, online tool">
   <meta name="author" content="SOUFIYAN IGUIDER">
-  <link rel="canonical" href="https://quickimagetools.vercel.app/">
-  
-  <!-- Fonts & Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Custom CSS -->
+  <link rel="canonical" href="https://imagenova.vercel.app/">
   <link rel="stylesheet" href="style.css">
-
-  <!-- Pica for image resize -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
 <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
-<!-- End Google Tag Manager -->
 
 <main class="container">
   <header class="tool-header">
     <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-    <h1>Quick Image Tool</h1>
-    <p>Resize, compress, and remove background from images instantly online</p>
+    <h1>Imagenova</h1>
+    <p>Resize, compress, convert, watermark, and remove background instantly online</p>
   </header>
 
   <section class="tool-section">
-    <label class="upload-label tooltip" for="imageInput">
+    <!-- Upload Image -->
+    <label class="upload-label" for="imageInput">
       <i class="fas fa-upload"></i> Choose Image
       <input type="file" id="imageInput" accept="image/*" hidden>
-      <span class="tooltiptext">Upload your image to start editing</span>
     </label>
 
+    <!-- Controls -->
     <div class="controls-section">
-      <button class="btn btn-secondary" id="resizeBtn">
-        <i class="fas fa-expand-arrows-alt"></i><span> Resize</span>
-      </button>
-      <button class="btn btn-success" id="removeBgBtn">
-        <i class="fas fa-magic"></i><span> Remove Background</span>
-      </button>
-      <button class="btn btn-danger full-width" id="downloadBtn" disabled>
-        <i class="fas fa-download"></i><span> Download</span>
-      </button>
+      <button class="btn btn-secondary" id="resizeBtn"><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
+      <button class="btn btn-warning" id="compressBtn"><i class="fas fa-compress-alt"></i><span> Compress</span></button>
+      <button class="btn btn-info" id="convertBtn"><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
+      <button class="btn btn-success" id="removeBgBtn"><i class="fas fa-magic"></i><span> Remove Background</span></button>
+      <button class="btn btn-dark" id="watermarkBtn"><i class="fas fa-water"></i><span> Watermark</span></button>
+      <button class="btn btn-danger full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
     </div>
 
+    <!-- Image Preview -->
     <div class="image-wrapper">
       <img id="output" src="" alt="Image Preview">
     </div>
 
     <p id="message" class="status-message"></p>
-  </section>
-
-  <section class="seo-text">
-    <h2>Resize Images Online Easily</h2>
-    <p>Quick Image Tool allows you to resize images online in seconds without losing quality. Upload your image and adjust the size instantly.</p>
-
-    <h2>Remove Background Instantly</h2>
-    <p>Remove the background from any image with one click. Fast and accurate AI-powered tool.</p>
-
-    <h2>Convert and Compress Images</h2>
-    <p>Convert images between JPG, PNG, and WebP formats and compress them for web or social media usage.</p>
-
-    <p>All processing is done locally in your browser. Your images are not stored on our servers.</p>
   </section>
 </main>
 
@@ -89,10 +66,9 @@
     <a href="terms.html">Terms of Service</a>
     <a href="contact.html">Contact</a>
   </nav>
-  <p class="footer-copy">© 2025 Quick Image Tool – All rights reserved</p>
+  <p class="footer-copy">© 2026 Imagenova – All rights reserved</p>
 </footer>
 
-<!-- Custom JS -->
 <script src="script.js" defer></script>
 </body>
 </html>
