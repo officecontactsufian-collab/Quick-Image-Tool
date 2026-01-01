@@ -13,58 +13,104 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imagenova – Online Image Tools</title>
-  <meta name="description" content="Resize, compress, convert, watermark, and remove background from images online with Imagenova.">
-  <meta name="keywords" content="image resize, compress, convert, remove background, watermark, online tool">
+  <title>ImageNova – All-in-One Image Tools</title>
+  <meta name="description" content="Resize, Compress, Convert, Add Watermark, and Remove Background from images online with ImageNova.">
+  <meta name="keywords" content="Resize, Compress, Convert, Watermark, Remove Background, Online Image Tools">
   <meta name="author" content="SOUFIYAN IGUIDER">
   <link rel="canonical" href="https://imagenova.vercel.app/">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
 <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header class="header">
+  <div class="logo">
+    <i class="fas fa-image"></i> ImageNova
+  </div>
+  <p>All-in-One Online Image Tools</p>
+</header>
 
 <main class="container">
-  <header class="tool-header">
-    <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-    <h1>Imagenova</h1>
-    <p>Resize, compress, convert, watermark, and remove background instantly online</p>
-  </header>
 
-  <section class="tool-section">
-    <label class="upload-label" for="imageInput">
-      <i class="fas fa-upload"></i> Choose Image
-      <input type="file" id="imageInput" accept="image/*" hidden>
-    </label>
+  <!-- Tabs Navigation -->
+  <nav class="tools-tabs">
+    <button class="tab-btn active" data-tool="resize">Resize</button>
+    <button class="tab-btn" data-tool="compress">Compress</button>
+    <button class="tab-btn" data-tool="convert">Convert</button>
+    <button class="tab-btn" data-tool="watermark">Watermark</button>
+    <button class="tab-btn" data-tool="removebg">Remove Background</button>
+  </nav>
 
-    <div class="controls-section">
-      <button class="btn btn-secondary" id="resizeBtn"><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
-      <button class="btn btn-warning" id="compressBtn"><i class="fas fa-compress-alt"></i><span> Compress</span></button>
-      <button class="btn btn-info" id="convertBtn"><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
-      <button class="btn btn-success" id="removeBgBtn"><i class="fas fa-magic"></i><span> Remove Background</span></button>
-      <button class="btn btn-dark" id="watermarkBtn"><i class="fas fa-water"></i><span> Watermark</span></button>
-      <button class="btn btn-danger full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
-    </div>
+  <!-- Tools Sections -->
+  <section class="tool-section active" id="resize">
+    <h2>Resize Image</h2>
+    <input type="file" class="image-input" data-tool="resize" accept="image/*">
+    <label>Width:</label>
+    <input type="number" class="resize-width" placeholder="800">
+    <label>Height:</label>
+    <input type="number" class="resize-height" placeholder="800">
+    <button class="btn btn-primary" onclick="resizeImage()">Resize</button>
+    <img class="output-img" alt="Preview">
+    <button class="btn btn-success download-btn" disabled>Download</button>
+  </section>
 
-    <div class="image-wrapper">
-      <img id="output" src="" alt="Image Preview">
-    </div>
+  <section class="tool-section" id="compress">
+    <h2>Compress Image</h2>
+    <input type="file" class="image-input" data-tool="compress" accept="image/*">
+    <label>Quality (0-100):</label>
+    <input type="number" class="compress-quality" placeholder="80">
+    <button class="btn btn-primary" onclick="compressImage()">Compress</button>
+    <img class="output-img" alt="Preview">
+    <button class="btn btn-success download-btn" disabled>Download</button>
+  </section>
 
-    <p id="message" class="status-message"></p>
+  <section class="tool-section" id="convert">
+    <h2>Convert Image</h2>
+    <input type="file" class="image-input" data-tool="convert" accept="image/*">
+    <label>Format:</label>
+    <select class="convert-format">
+      <option value="png">PNG</option>
+      <option value="jpg">JPG</option>
+      <option value="webp">WEBP</option>
+    </select>
+    <button class="btn btn-primary" onclick="convertImage()">Convert</button>
+    <img class="output-img" alt="Preview">
+    <button class="btn btn-success download-btn" disabled>Download</button>
+  </section>
+
+  <section class="tool-section" id="watermark">
+    <h2>Add Watermark</h2>
+    <input type="file" class="image-input" data-tool="watermark" accept="image/*">
+    <label>Watermark Text:</label>
+    <input type="text" class="watermark-text" placeholder="© ImageNova">
+    <button class="btn btn-primary" onclick="addWatermark()">Add Watermark</button>
+    <img class="output-img" alt="Preview">
+    <button class="btn btn-success download-btn" disabled>Download</button>
+  </section>
+
+  <section class="tool-section" id="removebg">
+    <h2>Remove Background</h2>
+    <input type="file" class="image-input" data-tool="removebg" accept="image/*">
+    <button class="btn btn-primary" onclick="removeBackground()">Remove Background</button>
+    <img class="output-img" alt="Preview">
+    <button class="btn btn-success download-btn" disabled>Download</button>
   </section>
 
 </main>
 
 <footer class="footer-center">
   <nav class="footer-links">
-    <a href="index.html">Home</a>
     <a href="privacy.html">Privacy Policy</a>
     <a href="terms.html">Terms of Service</a>
     <a href="contact.html">Contact</a>
   </nav>
-  <p class="footer-copy">© 2026 Imagenova – All rights reserved</p>
+  <p class="footer-copy">© 2025 ImageNova – All rights reserved | Contact: office.contact.sufian@gmail.com</p>
 </footer>
 
 <script src="script.js" defer></script>
