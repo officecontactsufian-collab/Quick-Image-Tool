@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <!-- الصفحة الرئيسية -->
-   <url>
-      <loc>https://imagenova.vercel.app/</loc>
-      <lastmod>2026-01-01</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>1.0</priority>
-   </url>
-
-   <!-- صفحة التواصل -->
-   <url>
-      <loc>https://imagenova.vercel.app/contact.html</loc>
-      <lastmod>2026-01-01</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-   </url>
-
-   <!-- صفحة الخصوصية -->
-   <url>
-      <loc>https://imagenova.vercel.app/privacy.html</loc>
-      <lastmod>2026-01-01</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.3</priority>
-   </url>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://imagenova.vercel.app/</loc></url>
+<url><loc>https://imagenova.vercel.app/privacy.html</loc></url>
+<url><loc>https://imagenova.vercel.app/terms.html</loc></url>
+<url><loc>https://imagenova.vercel.app/contact.html</loc></url>
 </urlset>
