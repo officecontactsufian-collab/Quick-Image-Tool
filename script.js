@@ -1,185 +1,96 @@
-let currentTool = '';
-let currentFile = null;
-const pica = window.pica ? window.pica() : null;
+// Elements
+const imageInput = document.getElementById('imageInput');
+const output = document.getElementById('output');
+const downloadBtn = document.getElementById('downloadBtn');
+const message = document.getElementById('message');
 
-// Navigation
-function selectTool(tool) {
-    currentTool = tool;
-    document.getElementById('tools-dashboard').classList.add('hidden');
-    document.getElementById('workspace').classList.remove('hidden');
-    
-    const titles = {
-        resize: 'Resize Image',
-        compress: 'Compress Image',
-        convert: 'Convert Format',
-        removebg: 'Remove Background (AI)'
-    };
-    document.getElementById('tool-title').textContent = titles[tool];
-    setupControls(tool);
-    resetEditor();
+const resizeBtn = document.getElementById('resizeBtn');
+const compressBtn = document.getElementById('compressBtn');
+const convertBtn = document.getElementById('convertBtn');
+const removeBgBtn = document.getElementById('removeBgBtn');
+const watermarkBtn = document.getElementById('watermarkBtn');
+
+// API Key hidden in separate file
+import { REMOVE_BG_API_KEY } from './API/remove-bg-js.js';
+
+// Utility functions
+function setBtnState(btn, isLoading, text = '', iconClass = '') {
+    if (!btn) return;
+    const icon = btn.querySelector('i');
+    const span = btn.querySelector('span');
+    btn.disabled = isLoading;
+    if (isLoading) { if(icon) icon.className='fas fa-spinner fa-spin'; if(span) span.innerText=' Processing...'; }
+    else { if(icon) icon.className=iconClass; if(span) span.innerText=text; }
 }
 
-function goHome() {
-    document.getElementById('workspace').classList.add('hidden');
-    document.getElementById('tools-dashboard').classList.remove('hidden');
+function notify(msg, type='success') {
+    if(!message) return;
+    message.innerText = msg;
+    message.style.color = type==='error'? '#ef4444':'#10b981';
 }
 
-function setupControls(tool) {
-    const container = document.getElementById('dynamic-controls');
-    container.innerHTML = '';
-
-    if (tool === 'resize') {
-        container.innerHTML = `
-            <div class="control-group"><label>Width (px)</label><input type="number" id="width" placeholder="Auto"></div>
-            <div class="control-group"><label>Height (px)</label><input type="number" id="height" placeholder="Auto"></div>`;
-    } else if (tool === 'compress') {
-        container.innerHTML = `
-            <div class="control-group"><label>Quality (0.1 - 1.0)</label><input type="range" id="quality" min="0.1" max="1.0" step="0.1" value="0.8"></div>`;
-    } else if (tool === 'convert') {
-        container.innerHTML = `
-            <div class="control-group"><label>Format</label>
-                <select id="format">
-                    <option value="image/jpeg">JPG</option>
-                    <option value="image/png">PNG</option>
-                    <option value="image/webp">WebP</option>
-                </select></div>`;
-    } else if (tool === 'removebg') {
-        container.innerHTML = `<p style="text-align:center; color:#64748b;">AI processing handled securely.</p>`;
-    }
-}
-
-// File Handling
-const dropZone = document.getElementById('drop-zone');
-const fileInput = document.getElementById('file-input');
-
-dropZone.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', (e) => loadFile(e.target.files[0]));
-
-dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.background = '#e0e7ff'; });
-dropZone.addEventListener('dragleave', () => dropZone.style.background = '#eff6ff');
-dropZone.addEventListener('drop', (e) => { e.preventDefault(); loadFile(e.dataTransfer.files[0]); });
-
-function loadFile(file) {
-    if (!file || !file.type.startsWith('image/')) return notify('Invalid file type', 'error');
-    currentFile = file;
-    const url = URL.createObjectURL(file);
-    document.getElementById('image-preview').src = url;
-    dropZone.classList.add('hidden');
-    document.getElementById('editor-area').classList.remove('hidden');
-    
-    const img = new Image();
-    img.src = url;
-    img.onload = () => {
-        if(document.getElementById('width')) document.getElementById('width').value = img.width;
-        if(document.getElementById('height')) document.getElementById('height').value = img.height;
-    };
-}
-
-function resetEditor() {
-    currentFile = null;
-    dropZone.classList.remove('hidden');
-    document.getElementById('editor-area').classList.add('hidden');
-    document.getElementById('download-btn').classList.add('hidden');
-    document.getElementById('process-btn').classList.remove('hidden');
-    dropZone.style.background = '#eff6ff';
-}
-
-// Processing
-document.getElementById('process-btn').addEventListener('click', async () => {
-    if (!currentFile) return;
-    const btn = document.getElementById('process-btn');
-    const spinner = document.getElementById('loading-spinner');
-    
-    btn.disabled = true;
-    btn.textContent = 'Processing...';
-    spinner.classList.remove('hidden');
-    
-    try {
-        if (currentTool === 'removebg') {
-            await handleRemoveBG();
-        } else {
-            await handleClientSide();
+// Load image
+if(imageInput) {
+    imageInput.addEventListener('change', function(){
+        if(this.files[0]){
+            const reader = new FileReader();
+            reader.onload = e => {
+                output.src = e.target.result;
+                downloadBtn.disabled=false;
+                notify('✅ Image uploaded successfully');
+            };
+            reader.readAsDataURL(this.files[0]);
         }
-        notify('Success!', 'success');
-    } catch (err) {
-        console.error(err);
-        notify('Error: ' + err.message, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Process Image';
-        spinner.classList.add('hidden');
-    }
-});
-
-async function handleRemoveBG() {
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
     });
-
-    const base64Image = await toBase64(currentFile);
-
-    // Call our own internal API
-    const res = await fetch('/api/remove-bg', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64Image })
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Server error');
-
-    showDownload(data.result, 'imagenova-nobg.png');
 }
 
-async function handleClientSide() {
-    const img = document.getElementById('image-preview');
-    const canvas = document.createElement('canvas');
-    let width = img.naturalWidth;
-    let height = img.naturalHeight;
-    let quality = 0.9;
-    let mime = 'image/jpeg';
-
-    if (currentTool === 'resize') {
-        width = parseInt(document.getElementById('width').value) || width;
-        height = parseInt(document.getElementById('height').value) || height;
-    } else if (currentTool === 'compress') {
-        quality = parseFloat(document.getElementById('quality').value);
-    } else if (currentTool === 'convert') {
-        mime = document.getElementById('format').value;
-    }
-
-    canvas.width = width;
-    canvas.height = height;
-
-    if (currentTool === 'resize' && pica) {
-        await pica.resize(img, canvas);
-    } else {
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-    }
-
-    const dataUrl = canvas.toDataURL(mime, quality);
-    const ext = mime.split('/')[1];
-    showDownload(dataUrl, `imagenova-edited.${ext}`);
+// Resize
+async function resizeImage() {
+    if(!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
+    setBtnState(resizeBtn,true);
+    const img = new Image();
+    img.src = URL.createObjectURL(imageInput.files[0]);
+    img.onload = async () => {
+        const canvas=document.createElement('canvas');
+        canvas.width=800; canvas.height=800;
+        try { await pica().resize(img,canvas); output.src=canvas.toDataURL(); notify('✨ Image resized'); }
+        catch(e){ notify('❌ Resize failed','error'); }
+        finally{ setBtnState(resizeBtn,false,' Resize','fas fa-expand-arrows-alt'); }
+    };
 }
 
-function showDownload(url, filename) {
-    const dlBtn = document.getElementById('download-btn');
-    document.getElementById('image-preview').src = url;
-    dlBtn.href = url;
-    dlBtn.download = filename;
-    dlBtn.classList.remove('hidden');
-    document.getElementById('process-btn').classList.add('hidden');
+// Remove Background
+async function removeBackground() {
+    if(!imageInput.files[0]) return notify('❌ Select an image first','error');
+    setBtnState(removeBgBtn,true);
+    const formData = new FormData();
+    formData.append('image_file',imageInput.files[0]);
+    formData.append('size','auto');
+    try {
+        const response = await fetch('https://api.remove.bg/v1.0/removebg',{
+            method:'POST',
+            headers:{'X-Api-Key':REMOVE_BG_API_KEY},
+            body:formData
+        });
+        if(!response.ok) throw new Error();
+        const blob = await response.blob();
+        output.src = URL.createObjectURL(blob);
+        notify('🪄 Background removed');
+    } catch(e){ notify('❌ API error or quota exceeded','error'); }
+    finally{ setBtnState(removeBgBtn,false,' Remove BG','fas fa-magic'); }
 }
 
-function notify(msg, type) {
-    const area = document.getElementById('notification-area');
-    const div = document.createElement('div');
-    div.className = `notif notif-${type}`;
-    div.innerText = msg;
-    area.appendChild(div);
-    setTimeout(() => div.remove(), 4000);
-}
+// Placeholder: compress, convert, watermark (add real logic later)
+function compressImage(){ notify('⚡ Compress not implemented'); }
+function convertImage(){ notify('⚡ Convert not implemented'); }
+function addWatermark(){ notify('⚡ Watermark not implemented'); }
+
+// Download
+if(downloadBtn) downloadBtn.addEventListener('click',()=>{ if(!output.src) return notify('❌ No image','error'); const a=document.createElement('a'); a.href=output.src; a.download=`Imagenova_${Date.now()}.png`; a.click(); notify('📥 Image downloaded'); });
+
+// Buttons
+if(resizeBtn) resizeBtn.addEventListener('click',resizeImage);
+if(removeBgBtn) removeBgBtn.addEventListener('click',removeBackground);
+if(compressBtn) compressBtn.addEventListener('click',compressImage);
+if(convertBtn) convertBtn.addEventListener('click',convertImage);
+if(watermarkBtn) watermarkBtn.addEventListener('click',addWatermark);
