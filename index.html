@@ -34,13 +34,11 @@
   </header>
 
   <section class="tool-section">
-    <!-- Upload Image -->
     <label class="upload-label" for="imageInput">
       <i class="fas fa-upload"></i> Choose Image
       <input type="file" id="imageInput" accept="image/*" hidden>
     </label>
 
-    <!-- Controls -->
     <div class="controls-section">
       <button class="btn btn-secondary" id="resizeBtn"><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
       <button class="btn btn-warning" id="compressBtn"><i class="fas fa-compress-alt"></i><span> Compress</span></button>
@@ -50,13 +48,13 @@
       <button class="btn btn-danger full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
     </div>
 
-    <!-- Image Preview -->
     <div class="image-wrapper">
       <img id="output" src="" alt="Image Preview">
     </div>
 
     <p id="message" class="status-message"></p>
   </section>
+
 </main>
 
 <footer class="footer-center">
