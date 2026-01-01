@@ -1,70 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Tag Manager -->
-  <script>
-  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-MKH28BJ7');
-  </script>
-  <!-- End Google Tag Manager -->
+<!-- Google Tag Manager -->
+<script>
+(function(w,d,s,l,i){w[l]=w[l]||[];
+w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MKH28BJ7');
+</script>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imagenova – Online Image Tools</title>
-  <meta name="description" content="Resize, compress, convert, remove background and watermark images online with Imagenova.">
-  <meta name="keywords" content="image resize, compress, convert, remove background, watermark, online tool">
-  <meta name="author" content="SOUFIYAN IGUIDER">
-  <link rel="canonical" href="https://imagenova.vercel.app/">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ImageNova – Image Tools Online</title>
+<meta name="author" content="SOUFIYAN IGUIDER">
+<meta name="description" content="Compress, resize, convert images online for free.">
+<link rel="canonical" href="https://imagenova.vercel.app/">
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7"
+height="0" width="0" style="display:none"></iframe>
 </noscript>
 
-<main class="container">
-  <header class="tool-header">
-    <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-    <h1>Imagenova</h1>
-    <p>Resize, Compress, Convert, Remove Background & Watermark Images Online</p>
-  </header>
+<header class="top">
+  <h1>ImageNova</h1>
+  <p>Simple & Smart Image Tools</p>
+</header>
 
-  <section class="tool-section">
-    <label class="upload-label" for="imageInput">
-      <i class="fas fa-upload"></i> Choose Image
-      <input type="file" id="imageInput" accept="image/*" hidden>
-    </label>
+<main class="wrapper">
 
-    <div class="controls-section">
-      <button class="btn btn-secondary" id="resizeBtn"><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
-      <button class="btn btn-success" id="compressBtn"><i class="fas fa-compress"></i><span> Compress</span></button>
-      <button class="btn btn-warning" id="convertBtn"><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
-      <button class="btn btn-primary" id="watermarkBtn"><i class="fas fa-water"></i><span> Watermark</span></button>
-      <button class="btn btn-danger" id="removeBgBtn"><i class="fas fa-magic"></i><span> Remove Background</span></button>
-      <button class="btn btn-info full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
-    </div>
+<section class="tools">
+  <button onclick="setTool('resize')">Resize</button>
+  <button onclick="setTool('compress')">Compress</button>
+  <button onclick="setTool('convert')">Convert</button>
+  <button onclick="setTool('watermark')">Watermark</button>
+  <button onclick="setTool('removebg')">Remove BG</button>
+</section>
 
-    <div class="image-wrapper" id="previewSection">
-      <img id="output" src="" alt="Preview">
-    </div>
-    <p id="message" class="status-message"></p>
-  </section>
+<section class="workspace">
+  <input type="file" id="fileInput" accept="image/*">
+  <div id="controls"></div>
+
+  <div class="preview">
+    <img id="preview" />
+  </div>
+
+  <button id="download" disabled>Download</button>
+</section>
+
 </main>
 
-<footer class="footer-center">
-  <nav class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Service</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <p class="footer-copy">© 2026 Imagenova – All rights reserved</p>
+<footer>
+  <p>© 2025 ImageNova</p>
+  <a href="privacy.html">Privacy</a> |
+  <a href="terms.html">Terms</a> |
+  <a href="contact.html">Contact</a>
 </footer>
 
-<script src="script.js" defer></script>
+<script src="app.js"></script>
 </body>
 </html>
