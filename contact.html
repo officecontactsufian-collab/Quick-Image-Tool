@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Contact - ImageNova</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Imagenova</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar"><div class="container nav-container"><a href="index.html" class="logo">Image<span class="highlight">Nova</span></a><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="contact.html" class="active">Contact</a></li></ul></div></nav>
-    <main class="container" style="text-align:center;margin-top:50px;">
-        <h1>Contact Us</h1>
-        <p>Email: <a href="mailto:office.contact.sufian@gmail.com">office.contact.sufian@gmail.com</a></p>
-        <p>Developer: <strong>SOUFIYAN IGUIDER</strong></p>
-    </main>
+<main class="container">
+<h1>Contact Us</h1>
+<p>Email: office.contact.sufian@gmail.com</p>
+<form action="mailto:office.contact.sufian@gmail.com" method="post" enctype="text/plain">
+<label>Name:</label><input type="text" name="name" required>
+<label>Email:</label><input type="email" name="email" required>
+<label>Message:</label><textarea name="message" rows="5" required></textarea>
+<button type="submit" class="btn btn-success">Send Message</button>
+</form>
+<a href="index.html">← Back to Home</a>
+</main>
 </body>
 </html>
