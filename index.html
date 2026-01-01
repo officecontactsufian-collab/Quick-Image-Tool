@@ -17,9 +17,15 @@
   <meta name="description" content="Quick Image Tool is a free online tool to resize images, remove background, compress images, and convert formats.">
   <meta name="keywords" content="image resize, image compressor, remove background, convert image, online image tools">
   <meta name="author" content="SOUFIYAN IGUIDER">
-  <link rel="canonical" href="https://imagenova.vercel.app/">
-  <link rel="stylesheet" href="style.css">
+  <link rel="canonical" href="https://quickimagetools.vercel.app/">
+  
+  <!-- Fonts & Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Pica for image resize -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
 </head>
 <body>
@@ -27,7 +33,7 @@
 <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
-<!-- End Google Tag Manager (noscript) -->
+<!-- End Google Tag Manager -->
 
 <main class="container">
   <header class="tool-header">
@@ -37,16 +43,17 @@
   </header>
 
   <section class="tool-section">
-    <label class="upload-label" for="imageInput">
+    <label class="upload-label tooltip" for="imageInput">
       <i class="fas fa-upload"></i> Choose Image
       <input type="file" id="imageInput" accept="image/*" hidden>
+      <span class="tooltiptext">Upload your image to start editing</span>
     </label>
 
     <div class="controls-section">
-      <button class="btn btn-secondary" onclick="resizeImage()">
+      <button class="btn btn-secondary" id="resizeBtn">
         <i class="fas fa-expand-arrows-alt"></i><span> Resize</span>
       </button>
-      <button class="btn btn-success" id="removeBgBtn" onclick="removeBackground()">
+      <button class="btn btn-success" id="removeBgBtn">
         <i class="fas fa-magic"></i><span> Remove Background</span>
       </button>
       <button class="btn btn-danger full-width" id="downloadBtn" disabled>
@@ -82,11 +89,10 @@
     <a href="terms.html">Terms of Service</a>
     <a href="contact.html">Contact</a>
   </nav>
-  <p class="footer-copy">
-    © 2025 Quick Image Tool – All rights reserved
-  </p>
+  <p class="footer-copy">© 2025 Quick Image Tool – All rights reserved</p>
 </footer>
 
+<!-- Custom JS -->
 <script src="script.js" defer></script>
 </body>
 </html>
