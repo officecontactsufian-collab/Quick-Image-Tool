@@ -211,7 +211,7 @@ function convertImage() {
 }
 
 // ---------------------------
-// 4. REMOVE BACKGROUND (FIXED FOR LARGE IMAGES)
+// 4. REMOVE BACKGROUND (FIXED)
 // ---------------------------
 async function removeBackground() {
     if(!currentFile) return notify('❌ Please upload an image first', 'error');
@@ -253,7 +253,7 @@ async function removeBackground() {
 }
 
 // ---------------------------
-// LISTENERS
+// DOWNLOAD & LISTENERS
 // ---------------------------
 if(downloadBtn) {
     downloadBtn.addEventListener('click', () => {
