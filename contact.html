@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Tag Manager -->
   <script>
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -9,74 +8,72 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-MKH28BJ7');
   </script>
-  <!-- End Google Tag Manager -->
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us | ImageNova</title>
-  <meta name="description" content="Contact the ImageNova team for questions, suggestions or issues regarding our online image tools.">
-  <meta name="keywords" content="Contact, ImageNova, Image Tools, Support">
-  <meta name="author" content="SOUFIYAN IGUIDER">
-  <link rel="canonical" href="https://imagenova.vercel.app/contact.html">
+  <title>Contact Us | Imagenova</title>
+  <meta name="description" content="Contact the Imagenova team.">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-<!-- End Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main class="container">
   <header class="tool-header">
     <h1>Contact Us</h1>
-    <p>We’re happy to hear from you! Send us your questions or suggestions.</p>
+    <p>Questions or suggestions? We'd love to hear from you.</p>
   </header>
 
   <section class="contact-section">
-    <h3>Email</h3>
-    <p>📧 <strong>office.contact.sufian@gmail.com</strong></p>
-    <p>We usually respond within 24–48 hours.</p>
+    <div class="contact-info">
+        <p><i class="fas fa-envelope"></i> <strong>office.contact.sufian@gmail.com</strong></p>
+        <small>Response time: 24-48 hours</small>
+    </div>
+    
+    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
 
-    <h3>Send a Message</h3>
     <form id="contactForm">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" placeholder="Your Name" required>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="John Doe" required>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" placeholder="Your Email" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="john@example.com" required>
 
-      <label for="message">Message:</label>
-      <textarea id="messageInput" name="message" rows="5" placeholder="Your Message" required></textarea>
+      <label for="message">Message</label>
+      <textarea id="messageInput" name="message" rows="5" placeholder="How can we help?" required></textarea>
 
-      <button type="submit" class="btn btn-success">Send Message</button>
+      <button type="submit" class="btn btn-success full-width">Send Message</button>
     </form>
 
     <p id="formStatus" class="status-message"></p>
   </section>
 
-  <p><a href="index.html">← Back to Home</a></p>
+  <p style="margin-top:20px;"><a href="index.html">← Back to Home</a></p>
 </main>
 
 <footer class="footer-center">
   <nav class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Service</a>
-    <a href="contact.html">Contact</a>
+    <a href="index.html">Home</a> | <a href="privacy.html">Privacy</a>
   </nav>
-  <p class="footer-copy">© 2026 ImageNova – All rights reserved</p>
+  <p class="footer-copy">© 2026 Imagenova</p>
 </footer>
 
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e){
     e.preventDefault();
     const status = document.getElementById('formStatus');
-    status.innerText = '📨 Sending message...';
-    // Simulate email sending (replace with real email service API if needed)
+    const btn = this.querySelector('button');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    
+    // NOTE: To make this work for real, use https://formspree.io/
     setTimeout(() => {
-        status.innerText = '✅ Message sent successfully!';
+        status.innerText = '✅ Message sent successfully! We will get back to you soon.';
+        status.style.color = 'var(--success)';
         document.getElementById('contactForm').reset();
+        btn.disabled = false;
+        btn.innerText = 'Send Message';
     }, 1500);
 });
 </script>
