@@ -203,10 +203,12 @@ function convertImage() {
 // 4. REMOVE BACKGROUND (API)
 // ---------------------------
 async function removeBackground() {
-    if(!currentFile) return;
+    if(!currentFile) return notify('❌ Please upload an image first', 'error');
     
-    const confirmAction = confirm("This uses a secure cloud API. Proceed?");
-    if(!confirmAction) return;
+    // تأكد من أن الملف ليس ضخماً جداً (Vercel Limit 4.5MB)
+    if (currentFile.size > 4.5 * 1024 * 1024) {
+        return notify('❌ Image too large. Max 4.5MB for this feature.', 'error');
+    }
 
     setLoading(removeBgBtn, true, '', '');
 
@@ -214,27 +216,38 @@ async function removeBackground() {
         const formData = new FormData();
         formData.append('image_file', currentFile);
 
-        // Call the Vercel Serverless Function
         const response = await fetch('/api/remove-bg', {
             method: 'POST',
             body: formData
         });
 
-        if (!response.ok) {
-            const errData = await response.json();
-            throw new Error(errData.error || 'Server Error');
+        // هنا التغيير المهم: نتحقق من نوع المحتوى قبل التحويل
+        const contentType = response.headers.get("content-type");
+
+        if (response.ok && contentType && contentType.includes("image")) {
+            // نجاح: استلام الصورة
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            output.src = url;
+            currentFormat = 'png';
+            notify('🪄 Background removed successfully!');
+        } else {
+            // فشل: محاولة قراءة الخطأ كنص أو JSON
+            const errorText = await response.text();
+            let errorMessage = 'Unknown Server Error';
+            try {
+                // محاولة تحويل النص إلى JSON
+                const jsonError = JSON.parse(errorText);
+                errorMessage = jsonError.error;
+            } catch(e) {
+                // إذا فشل التحويل، استخدم النص كما هو (غالباً هذا هو سبب مشكلتك الحالية)
+                errorMessage = errorText; 
+            }
+            throw new Error(errorMessage);
         }
 
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        output.src = url;
-        
-        // Update format to PNG to support transparency
-        currentFormat = 'png';
-        
-        notify('🪄 Background removed successfully!');
     } catch(e) {
-        console.error(e);
+        console.error("Full Error Details:", e);
         notify(`❌ Error: ${e.message}`, 'error');
     } finally {
         setLoading(removeBgBtn, false, ' Remove BG', 'fas fa-magic');
