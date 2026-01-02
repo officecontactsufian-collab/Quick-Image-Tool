@@ -210,48 +210,28 @@ function convertImage() {
     };
 }
 
-// ---------------------------
-// 4. REMOVE BACKGROUND (FIXED)
-// ---------------------------
 async function removeBackground() {
     if(!currentFile) return notify('❌ Please upload an image first', 'error');
-    
+
     setLoading(removeBgBtn, true, '', '');
 
     try {
-        // الخطوة السحرية: تجهيز وضغط الصورة قبل الإرسال لتفادي خطأ Vercel
-        const optimizedFile = await prepareImageForAPI(currentFile);
-
-        const formData = new FormData();
-        formData.append('image_file', optimizedFile);
-
         const response = await fetch('/api/remove-bg', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ test: 'hello' })
         });
 
-        // التحقق من نوع المحتوى
-        const contentType = response.headers.get("content-type");
-        if (response.ok && contentType && contentType.includes("image")) {
-            const blob = await response.blob();
-            output.src = URL.createObjectURL(blob);
-            currentFormat = 'png';
-            notify('🪄 Background removed successfully!');
-        } else {
-            const errText = await response.text();
-            let msg = 'Server Error';
-            try { msg = JSON.parse(errText).error; } catch(e){ msg = errText; }
-            throw new Error(msg);
-        }
+        const data = await response.json();
+        console.log(data); // شوف شنو راجع من السيرفر
+        notify(`✅ Server responded: ${JSON.stringify(data)}`);
 
     } catch(e) {
-        console.error(e);
         notify(`❌ Error: ${e.message}`, 'error');
     } finally {
         setLoading(removeBgBtn, false, ' Remove BG', 'fas fa-magic');
     }
 }
-
 // ---------------------------
 // DOWNLOAD & LISTENERS
 // ---------------------------
