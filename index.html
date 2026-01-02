@@ -13,78 +13,68 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imagenova – Free Online Image Tools</title>
-  <meta name="description" content="Imagenova is a free online platform to resize, compress, convert images and remove backgrounds easily.">
-  <meta name="keywords" content="Image Resize, Image Compress, Remove Background, Convert Image, Online Image Tool">
+  <title>Imagenova – Resize, Compress, Convert & Remove Background</title>
+  <meta name="description" content="Imagenova is a free online image tool to resize, compress, convert formats and remove background instantly.">
+  <meta name="keywords" content="image resize, image compress, convert image, remove background, online tool">
   <meta name="author" content="SOUFIYAN IGUIDER">
   <link rel="canonical" href="https://imagenova.vercel.app/">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
 <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKH28BJ7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <main class="container">
   <header class="tool-header">
     <div class="logo-icon"><i class="fas fa-bolt"></i></div>
     <h1>Imagenova</h1>
-    <p>Resize, compress, convert, and remove background from images instantly online</p>
+    <p>Resize, Compress, Convert & Remove Background from your images online</p>
   </header>
 
-  <!-- Upload -->
   <section class="tool-section">
     <label class="upload-label" for="imageInput">
       <i class="fas fa-upload"></i> Choose Image
       <input type="file" id="imageInput" accept="image/*" hidden>
     </label>
 
-    <!-- Controls -->
     <div class="controls-section">
-      <button class="btn btn-secondary" id="resizeBtn">
-        <i class="fas fa-expand-arrows-alt"></i><span> Resize</span>
-      </button>
-      <button class="btn btn-success" id="compressBtn">
-        <i class="fas fa-compress"></i><span> Compress</span>
-      </button>
-      <button class="btn btn-secondary" id="convertBtn">
-        <i class="fas fa-exchange-alt"></i><span> Convert</span>
-      </button>
-      <button class="btn btn-success" id="removeBgBtn">
-        <i class="fas fa-magic"></i><span> Remove Background</span>
-      </button>
-      <button class="btn btn-danger full-width" id="downloadBtn" disabled>
-        <i class="fas fa-download"></i><span> Download</span>
-      </button>
+      <button class="btn btn-secondary" id="resizeBtn"><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
+      <button class="btn btn-success" id="compressBtn"><i class="fas fa-compress"></i><span> Compress</span></button>
+      <button class="btn btn-warning" id="convertBtn"><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
+      <button class="btn btn-danger" id="removeBgBtn"><i class="fas fa-magic"></i><span> Remove Background</span></button>
+      <button class="btn btn-info full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download</span></button>
     </div>
 
-    <!-- Preview -->
     <div class="image-wrapper">
-      <img id="output" src="" alt="Image Preview">
+      <img id="output" src="" alt="Preview Image">
     </div>
 
     <p id="message" class="status-message"></p>
   </section>
 
-  <!-- SEO / Info Section -->
   <section class="seo-text">
-    <h2>Resize Images Online</h2>
-    <p>Upload your image and change its dimensions instantly without losing quality.</p>
+    <h2>Resize Images Online Easily</h2>
+    <p>Change your image dimensions without losing quality.</p>
 
-    <h2>Remove Background Instantly</h2>
-    <p>Remove the background from any image with one click. Fast, accurate, and AI-powered.</p>
+    <h2>Compress Images</h2>
+    <p>Reduce file size for web or social media usage while keeping clarity.</p>
 
-    <h2>Compress & Convert Images</h2>
-    <p>Reduce file size for web or social media use, and convert between JPG, PNG, and WebP formats.</p>
+    <h2>Convert Formats</h2>
+    <p>Convert between PNG, JPEG, and WebP instantly.</p>
 
-    <p>All processing happens locally in your browser. Your images are never stored on our servers.</p>
+    <h2>Remove Background</h2>
+    <p>Remove the background from any image quickly and safely. All processing is done securely on our server.</p>
+
+    <p>Your images are not stored permanently. Privacy is guaranteed.</p>
   </section>
 </main>
 
-<!-- Footer -->
 <footer class="footer-center">
   <nav class="footer-links">
     <a href="index.html">Home</a>
@@ -92,12 +82,7 @@
     <a href="terms.html">Terms of Service</a>
     <a href="contact.html">Contact</a>
   </nav>
-  <p class="footer-copy">
-    © 2026 Imagenova – All rights reserved | Contact: <a href="mailto:office.contact.sufian@gmail.com">office.contact.sufian@gmail.com</a>
-  </p>
+  <p class="footer-copy">© 2026 Imagenova – All rights reserved | SOUFIYAN IGUIDER</p>
 </footer>
-
-<!-- Script -->
-<script src="script.js" defer></script>
 </body>
 </html>
