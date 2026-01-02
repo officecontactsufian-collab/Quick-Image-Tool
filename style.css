@@ -1,6 +1,3 @@
-/* ==========================
-   VARIABLES
-========================== */
 :root {
   --primary: #6366f1;
   --success: #10b981;
@@ -9,14 +6,9 @@
   --text-dark: #111827;
   --text-light: #6b7280;
   --bg-light: #f3f4f6;
-  --border-radius: 16px;
-  --shadow: 0 20px 60px rgba(0,0,0,0.25);
-  --transition: 0.3s;
+  --shadow: rgba(0,0,0,0.15);
 }
 
-/* ==========================
-   GLOBAL STYLES
-========================== */
 * {
   box-sizing: border-box;
 }
@@ -26,134 +18,123 @@ body {
   background: var(--bg-gradient);
   margin: 0;
   min-height: 100vh;
-  padding: 20px;
   color: var(--text-dark);
 }
 
-a { text-decoration: none; color: var(--primary); }
-
 .container {
-  background: #fff;
-  padding: 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
   max-width: 700px;
-  width: 100%;
-  margin: 40px auto;
+  width: 95%;
+  margin: 50px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px var(--shadow);
   text-align: center;
 }
 
-/* ==========================
-   HEADER
-========================== */
-.tool-header {
-  margin-bottom: 30px;
+h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
-.logo-icon { 
-  font-size: 3rem; 
-  color: var(--primary); 
-  margin-bottom: 10px; 
+h2, h3 {
+  color: var(--text-dark);
+  margin-bottom: 10px;
 }
 
-h1 { 
-  margin: 0 0 10px; 
-  font-size: 2.2rem;
+p {
+  margin: 8px 0 15px;
+  line-height: 1.5;
+  color: var(--text-light);
 }
 
-p { 
-  margin: 5px 0 15px; 
-  font-size: 1rem;
+.logo-icon {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 10px;
 }
 
-/* ==========================
-   UPLOAD
-========================== */
+/* Upload Section */
 .upload-label {
   display: flex;
   flex-direction: column;
   padding: 30px;
   border: 2px dashed #e5e7eb;
-  border-radius: var(--border-radius);
+  border-radius: 16px;
   cursor: pointer;
   background: #f9fafb;
-  transition: var(--transition);
+  transition: 0.3s;
   margin-bottom: 20px;
+  align-items: center;
 }
 
-.upload-label:hover { 
-  border-color: var(--primary); 
-  background: #f5f7ff; 
+.upload-label:hover {
+  border-color: var(--primary);
+  background: #f5f7ff;
 }
 
-/* ==========================
-   BUTTONS
-========================== */
-.controls-section { 
-  display: grid; 
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 12px; 
+/* Buttons */
+.controls-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 .btn {
-  width: 100%;
   padding: 12px;
-  border: none;
   border-radius: 12px;
+  border: none;
   font-weight: 600;
   cursor: pointer;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  transition: transform var(--transition);
+  transition: 0.2s;
 }
 
-.btn:active { transform: scale(0.96); }
+.btn:active {
+  transform: scale(0.96);
+}
 
 .btn-secondary { background: #f3f4f6; color: #4b5563; }
-.btn-danger { background: #fee2e2; color: var(--danger); }
 .btn-success { background: var(--success); color: white; }
 .btn-success:disabled { background: #d1d5db; cursor: not-allowed; }
+.btn-danger { background: #fee2e2; color: var(--danger); }
 
 .full-width { grid-column: span 2; }
 
-/* ==========================
-   IMAGE PREVIEW
-========================== */
+/* Image preview */
 .image-wrapper {
   margin-top: 25px;
-  border-radius: var(--border-radius);
+  border-radius: 16px;
   background: var(--bg-light);
-  padding: 8px;
+  padding: 10px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 250px;
 }
 
-#output { 
-  max-width: 100%; 
-  max-height: 500px; 
-  border-radius: 12px; 
-  transition: var(--transition); 
+#output {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 12px;
   display: block;
+  transition: 0.3s;
 }
 
-/* ==========================
-   STATUS MESSAGE
-========================== */
-.status-message { 
-  margin-top: 15px; 
-  font-weight: 600; 
-  font-size: 0.9rem; 
+/* Status messages */
+.status-message {
+  margin-top: 15px;
+  font-weight: 600;
+  font-size: 0.9rem;
   word-break: break-word;
 }
 
-/* ==========================
-   FORM STYLES
-========================== */
+/* Form */
 form label {
   font-weight: 600;
   display: block;
@@ -171,9 +152,7 @@ form input, form textarea {
 
 form button { margin-top: 10px; }
 
-/* ==========================
-   FOOTER
-========================== */
+/* Footer */
 .footer-center {
   margin-top: 40px;
   padding: 30px 10px;
@@ -202,10 +181,16 @@ form button { margin-top: 10px; }
   color: var(--text-light);
 }
 
-/* ==========================
-   RESPONSIVE
-========================== */
+/* Responsive */
 @media (max-width: 480px) {
-  .controls-section { grid-template-columns: 1fr; }
-  .full-width { grid-column: span 1; }
-  .container { padding: 20px; margin: 20px auto;
+  .controls-section {
+    grid-template-columns: 1fr;
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+  .container {
+    padding: 20px;
+    margin: 20px auto;
+  }
+}
