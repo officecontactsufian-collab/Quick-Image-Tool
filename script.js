@@ -169,6 +169,7 @@ async function removeBackground() {
     const formData = new FormData();
     formData.append('image_file', currentFile);
 
+    // طلب الـ API server-side
     const response = await fetch('/api/remove-bg.js', {
       method: 'POST',
       body: formData
@@ -179,8 +180,8 @@ async function removeBackground() {
     output.src = URL.createObjectURL(blob);
     notify('🪄 Background removed successfully');
     enableDownload();
-
   } catch(e) {
+    console.error(e);
     notify('❌ Remove background failed', 'error');
   } finally {
     setBtnState(removeBgBtn, false, ' Remove Background', 'fas fa-magic');
