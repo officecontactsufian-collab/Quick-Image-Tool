@@ -1,5 +1,5 @@
 // ---------------------------
-// ELEMENTS
+// ELEMENTS & VARIABLES
 // ---------------------------
 const imageInput = document.getElementById('imageInput');
 const output = document.getElementById('output');
@@ -14,9 +14,6 @@ const removeBgBtn = document.getElementById('removeBgBtn');
 
 const allActionBtns = [resizeBtn, compressBtn, convertBtn, removeBgBtn];
 
-// ---------------------------
-// STATE
-// ---------------------------
 let currentFile = null;
 let currentFormat = 'png';
 let originalFileName = 'image';
@@ -25,29 +22,82 @@ let originalFileName = 'image';
 // UTILITIES
 // ---------------------------
 function notify(msg, type = 'success') {
+    if(!message) return;
     message.innerText = msg;
     message.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
-    // Clear message after 5 seconds
     setTimeout(() => { message.innerText = ''; }, 5000);
 }
 
 function toggleButtons(disabled) {
-    allActionBtns.forEach(btn => btn.disabled = disabled);
+    allActionBtns.forEach(btn => { if(btn) btn.disabled = disabled; });
 }
 
 function setLoading(btn, isLoading, originalText, iconClass) {
+    if(!btn) return;
     const icon = btn.querySelector('i');
     const span = btn.querySelector('span');
     
     if (isLoading) {
-        toggleButtons(true); // Disable all
+        toggleButtons(true);
         if(icon) icon.className = 'fas fa-spinner fa-spin';
         if(span) span.innerText = ' Processing...';
     } else {
-        toggleButtons(false); // Enable all
+        toggleButtons(false);
         if(icon) icon.className = iconClass;
         if(span) span.innerText = originalText;
     }
+}
+
+// ---------------------------
+// HELPER: Auto-Compress for API (Fixes Vercel 4.5MB Limit)
+// ---------------------------
+async function prepareImageForAPI(file) {
+    // 1. إذا كان الملف أقل من 3.5 ميجابايت، أرسله كما هو
+    if (file.size < 3.5 * 1024 * 1024) return file;
+
+    notify('⚠️ Image is large, optimizing before upload...', 'info');
+
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            
+            // حساب أبعاد جديدة (Max 1920px) للحفاظ على الجودة وتقليل الحجم
+            let width = img.width;
+            let height = img.height;
+            const maxSize = 1920;
+
+            if (width > height) {
+                if (width > maxSize) {
+                    height *= maxSize / width;
+                    width = maxSize;
+                }
+            } else {
+                if (height > maxSize) {
+                    width *= maxSize / height;
+                    height = maxSize;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // التحويل إلى JPEG بجودة 80% لضمان أن الحجم أقل من 4MB
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    console.log(`Original: ${file.size}, Compressed: ${blob.size}`);
+                    resolve(blob);
+                } else {
+                    reject(new Error("Compression failed"));
+                }
+            }, 'image/jpeg', 0.8);
+        };
+        img.onerror = (e) => reject(e);
+    });
 }
 
 // ---------------------------
@@ -56,44 +106,36 @@ function setLoading(btn, isLoading, originalText, iconClass) {
 if(imageInput) {
     imageInput.addEventListener('change', function() {
         if(this.files && this.files[0]) {
-            handleFile(this.files[0]);
+            const file = this.files[0];
+            if (!file.type.startsWith('image/')) {
+                return notify('❌ Please upload a valid image file', 'error');
+            }
+
+            currentFile = file;
+            originalFileName = file.name.split('.')[0];
+            currentFormat = file.type.split('/')[1];
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                output.src = e.target.result;
+                output.style.display = 'block';
+                if(placeholderText) placeholderText.style.display = 'none';
+                toggleButtons(false);
+                if(downloadBtn) downloadBtn.disabled = false;
+                notify(`✅ Loaded: ${file.name}`);
+            };
+            reader.readAsDataURL(file);
         }
     });
 }
 
-function handleFile(file) {
-    if (!file.type.startsWith('image/')) {
-        return notify('❌ Please upload a valid image file', 'error');
-    }
-
-    currentFile = file;
-    originalFileName = file.name.split('.')[0];
-    currentFormat = file.type.split('/')[1];
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        output.src = e.target.result;
-        output.style.display = 'block';
-        if(placeholderText) placeholderText.style.display = 'none';
-        
-        // Enable buttons
-        toggleButtons(false);
-        downloadBtn.disabled = false;
-        
-        notify(`✅ Loaded: ${file.name}`);
-    };
-    reader.readAsDataURL(file);
-}
-
 // ---------------------------
-// 1. RESIZE IMAGE (Using Pica for High Quality)
+// 1. RESIZE IMAGE
 // ---------------------------
 async function resizeImage() {
     if(!output.src) return;
-    
     const img = new Image();
     img.src = output.src;
-    
     img.onload = async () => {
         const newWidth = prompt(`Current width: ${img.width}px. Enter new width:`, img.width);
         if(!newWidth || isNaN(newWidth)) return;
@@ -102,23 +144,17 @@ async function resizeImage() {
         const newHeight = Math.round(newWidth * aspectRatio);
 
         setLoading(resizeBtn, true, '', '');
-
         const canvas = document.createElement('canvas');
         canvas.width = parseInt(newWidth);
         canvas.height = newHeight;
 
         try {
-            // Check if Pica is loaded
-            if (typeof pica === 'undefined') throw new Error("Resize library not loaded.");
-
-            const picaResizer = pica();
-            await picaResizer.resize(img, canvas);
-            
+            if (typeof pica === 'undefined') throw new Error("Resize lib missing");
+            await pica().resize(img, canvas);
             output.src = canvas.toDataURL(`image/${currentFormat}`);
             notify(`✨ Resized to ${newWidth}x${newHeight}px`);
         } catch(e) {
-            console.error(e);
-            notify('❌ Resize failed. Try reloading.', 'error');
+            notify('❌ Resize failed', 'error');
         } finally {
             setLoading(resizeBtn, false, ' Resize', 'fas fa-expand-arrows-alt');
         }
@@ -130,13 +166,10 @@ async function resizeImage() {
 // ---------------------------
 function compressImage() {
     if(!output.src) return;
-
-    const qualityInput = prompt("Enter quality (0.1 to 1.0). Lower is smaller file size.", "0.7");
-    let quality = parseFloat(qualityInput);
-    if(isNaN(quality) || quality < 0.1 || quality > 1) return notify('❌ Invalid quality', 'error');
+    const quality = prompt("Enter quality (0.1 - 1.0)", "0.7");
+    if(!quality) return;
 
     setLoading(compressBtn, true, '', '');
-
     const img = new Image();
     img.src = output.src;
     img.onload = () => {
@@ -144,17 +177,10 @@ function compressImage() {
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-        
-        // Handle transparency for JPEGs (fill white)
-        if (currentFormat === 'jpeg' || currentFormat === 'jpg') {
-            ctx.fillStyle = "#FFFFFF";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        
+        if (currentFormat.includes('jp')) { ctx.fillStyle="#FFF"; ctx.fillRect(0,0,canvas.width,canvas.height); }
         ctx.drawImage(img, 0, 0);
-        
-        output.src = canvas.toDataURL(`image/${currentFormat}`, quality);
-        notify(`✨ Compressed with quality ${quality}`);
+        output.src = canvas.toDataURL(`image/${currentFormat}`, parseFloat(quality));
+        notify(`✨ Compressed`);
         setLoading(compressBtn, false, ' Compress', 'fas fa-compress');
     };
 }
@@ -164,17 +190,10 @@ function compressImage() {
 // ---------------------------
 function convertImage() {
     if(!output.src) return;
-
-    const newFormat = prompt("Convert to: png, jpeg, or webp?", "jpeg");
-    if(!newFormat) return;
-    
-    const validFormats = ['png', 'jpeg', 'jpg', 'webp'];
-    if(!validFormats.includes(newFormat.toLowerCase())) {
-        return notify('❌ Unsupported format', 'error');
-    }
+    const format = prompt("Convert to: png, jpeg, webp", "jpeg");
+    if(!format) return;
 
     setLoading(convertBtn, true, '', '');
-
     const img = new Image();
     img.src = output.src;
     img.onload = () => {
@@ -182,72 +201,51 @@ function convertImage() {
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-
-        // Handle transparency if converting PNG -> JPEG
-        if (newFormat === 'jpeg' || newFormat === 'jpg') {
-            ctx.fillStyle = "#FFFFFF";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
+        if (format.includes('jp')) { ctx.fillStyle="#FFF"; ctx.fillRect(0,0,canvas.width,canvas.height); }
         ctx.drawImage(img, 0, 0);
-        
-        currentFormat = newFormat.toLowerCase();
+        currentFormat = format.toLowerCase();
         output.src = canvas.toDataURL(`image/${currentFormat}`);
-        
-        notify(`🔄 Converted to ${currentFormat.toUpperCase()}`);
+        notify(`🔄 Converted to ${currentFormat}`);
         setLoading(convertBtn, false, ' Convert', 'fas fa-exchange-alt');
     };
 }
 
 // ---------------------------
-// 4. REMOVE BACKGROUND (API)
+// 4. REMOVE BACKGROUND (FIXED FOR LARGE IMAGES)
 // ---------------------------
 async function removeBackground() {
     if(!currentFile) return notify('❌ Please upload an image first', 'error');
     
-    // تأكد من أن الملف ليس ضخماً جداً (Vercel Limit 4.5MB)
-    if (currentFile.size > 4.5 * 1024 * 1024) {
-        return notify('❌ Image too large. Max 4.5MB for this feature.', 'error');
-    }
-
     setLoading(removeBgBtn, true, '', '');
 
     try {
+        // الخطوة السحرية: تجهيز وضغط الصورة قبل الإرسال لتفادي خطأ Vercel
+        const optimizedFile = await prepareImageForAPI(currentFile);
+
         const formData = new FormData();
-        formData.append('image_file', currentFile);
+        formData.append('image_file', optimizedFile);
 
         const response = await fetch('/api/remove-bg', {
             method: 'POST',
             body: formData
         });
 
-        // هنا التغيير المهم: نتحقق من نوع المحتوى قبل التحويل
+        // التحقق من نوع المحتوى
         const contentType = response.headers.get("content-type");
-
         if (response.ok && contentType && contentType.includes("image")) {
-            // نجاح: استلام الصورة
             const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
-            output.src = url;
+            output.src = URL.createObjectURL(blob);
             currentFormat = 'png';
             notify('🪄 Background removed successfully!');
         } else {
-            // فشل: محاولة قراءة الخطأ كنص أو JSON
-            const errorText = await response.text();
-            let errorMessage = 'Unknown Server Error';
-            try {
-                // محاولة تحويل النص إلى JSON
-                const jsonError = JSON.parse(errorText);
-                errorMessage = jsonError.error;
-            } catch(e) {
-                // إذا فشل التحويل، استخدم النص كما هو (غالباً هذا هو سبب مشكلتك الحالية)
-                errorMessage = errorText; 
-            }
-            throw new Error(errorMessage);
+            const errText = await response.text();
+            let msg = 'Server Error';
+            try { msg = JSON.parse(errText).error; } catch(e){ msg = errText; }
+            throw new Error(msg);
         }
 
     } catch(e) {
-        console.error("Full Error Details:", e);
+        console.error(e);
         notify(`❌ Error: ${e.message}`, 'error');
     } finally {
         setLoading(removeBgBtn, false, ' Remove BG', 'fas fa-magic');
@@ -255,21 +253,19 @@ async function removeBackground() {
 }
 
 // ---------------------------
-// DOWNLOAD
-// ---------------------------
-downloadBtn.addEventListener('click', () => {
-    if(!output.src) return;
-    const link = document.createElement('a');
-    link.download = `${originalFileName}_edited.${currentFormat}`;
-    link.href = output.src;
-    link.click();
-    notify('📥 Downloading...');
-});
-
-// ---------------------------
 // LISTENERS
 // ---------------------------
-resizeBtn.addEventListener('click', resizeImage);
-compressBtn.addEventListener('click', compressImage);
-convertBtn.addEventListener('click', convertImage);
-removeBgBtn.addEventListener('click', removeBackground);
+if(downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+        if(!output.src) return;
+        const a = document.createElement('a');
+        a.download = `${originalFileName}_imagenova.${currentFormat}`;
+        a.href = output.src;
+        a.click();
+    });
+}
+
+if(resizeBtn) resizeBtn.addEventListener('click', resizeImage);
+if(compressBtn) compressBtn.addEventListener('click', compressImage);
+if(convertBtn) convertBtn.addEventListener('click', convertImage);
+if(removeBgBtn) removeBgBtn.addEventListener('click', removeBackground);
