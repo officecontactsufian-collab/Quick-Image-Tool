@@ -162,35 +162,29 @@ async function convertImage() {
         Remove Background
 ---------------------------- */
 async function removeBackground() {
-    if(!currentFile) return notify('❌ Please select an image first', 'error');
-    setBtnState(removeBgBtn, true, '', '');
+  if(!currentFile) return notify('❌ Please select an image first', 'error');
+  setBtnState(removeBgBtn, true, '', '');
 
-    try {
-        const formData = new FormData();
-        formData.append('image_file', currentFile);
+  try {
+    const formData = new FormData();
+    formData.append('image_file', currentFile);
 
-        // استدعاء الملف الخارجي api/remove-bg.js
-        const response = await fetch('/api/remove-bg.js', {
-            method: 'POST',
-            body: formData
-        });
+    const response = await fetch('/api/remove-bg.js', {
+      method: 'POST',
+      body: formData
+    });
 
-        if (!response.ok) {
-            const text = await response.text();
-            throw new Error(`API Error: ${text}`);
-        }
+    if(!response.ok) throw new Error();
+    const blob = await response.blob();
+    output.src = URL.createObjectURL(blob);
+    notify('🪄 Background removed successfully');
+    enableDownload();
 
-        const blob = await response.blob();
-        output.src = URL.createObjectURL(blob);
-        notify('🪄 Background removed successfully');
-        enableDownload();
-
-    } catch(e) {
-        console.error(e);
-        notify('❌ Failed to remove background. Please check your API key or try again.', 'error');
-    } finally {
-        setBtnState(removeBgBtn, false, ' Remove Background', 'fas fa-magic');
-    }
+  } catch(e) {
+    notify('❌ Remove background failed', 'error');
+  } finally {
+    setBtnState(removeBgBtn, false, ' Remove Background', 'fas fa-magic');
+  }
 }
 
 // ربط الأزرار
