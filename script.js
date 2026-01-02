@@ -5,202 +5,258 @@ const imageInput = document.getElementById('imageInput');
 const output = document.getElementById('output');
 const downloadBtn = document.getElementById('downloadBtn');
 const message = document.getElementById('message');
+const placeholderText = document.getElementById('placeholderText');
 
 const resizeBtn = document.getElementById('resizeBtn');
 const compressBtn = document.getElementById('compressBtn');
 const convertBtn = document.getElementById('convertBtn');
 const removeBgBtn = document.getElementById('removeBgBtn');
 
+const allActionBtns = [resizeBtn, compressBtn, convertBtn, removeBgBtn];
+
 // ---------------------------
-// DEFAULT SETTINGS
+// STATE
 // ---------------------------
 let currentFile = null;
 let currentFormat = 'png';
-let currentQuality = 0.9;
+let originalFileName = 'image';
 
 // ---------------------------
-// NOTIFICATION
+// UTILITIES
 // ---------------------------
 function notify(msg, type = 'success') {
-    if(!message) return;
     message.innerText = msg;
-    message.style.color = type === 'error' ? '#ef4444' : '#10b981';
+    message.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
+    // Clear message after 5 seconds
+    setTimeout(() => { message.innerText = ''; }, 5000);
 }
 
-// ---------------------------
-// ENABLE DOWNLOAD BUTTON
-// ---------------------------
-function enableDownload() {
-    if(downloadBtn) downloadBtn.disabled = !output.src;
+function toggleButtons(disabled) {
+    allActionBtns.forEach(btn => btn.disabled = disabled);
 }
 
-// ---------------------------
-// BUTTON STATE HELPER
-// ---------------------------
-function setBtnState(btn, isLoading, text, iconClass) {
-    if(!btn) return;
+function setLoading(btn, isLoading, originalText, iconClass) {
     const icon = btn.querySelector('i');
     const span = btn.querySelector('span');
-
-    if(isLoading){
-        btn.disabled = true;
+    
+    if (isLoading) {
+        toggleButtons(true); // Disable all
         if(icon) icon.className = 'fas fa-spinner fa-spin';
         if(span) span.innerText = ' Processing...';
     } else {
-        btn.disabled = false;
+        toggleButtons(false); // Enable all
         if(icon) icon.className = iconClass;
-        if(span) span.innerText = text;
+        if(span) span.innerText = originalText;
     }
 }
 
 // ---------------------------
-// UPLOAD IMAGE
+// UPLOAD HANDLER
 // ---------------------------
-if(imageInput){
-    imageInput.addEventListener('change', function(){
-        if(this.files[0]){
-            currentFile = this.files[0];
-            const reader = new FileReader();
-            reader.onload = (e)=>{
-                output.src = e.target.result;
-                enableDownload();
-                notify('✅ Image uploaded successfully');
-            };
-            reader.readAsDataURL(currentFile);
+if(imageInput) {
+    imageInput.addEventListener('change', function() {
+        if(this.files && this.files[0]) {
+            handleFile(this.files[0]);
         }
     });
 }
 
-// ---------------------------
-// DOWNLOAD IMAGE
-// ---------------------------
-if(downloadBtn){
-    downloadBtn.addEventListener('click', ()=>{
-        if(!output.src) return notify('❌ No image to download','error');
-        const a = document.createElement('a');
-        a.href = output.src;
-        a.download = `Imagenova_${Date.now()}.${currentFormat}`;
-        a.click();
-        notify('📥 Image downloaded');
-    });
+function handleFile(file) {
+    if (!file.type.startsWith('image/')) {
+        return notify('❌ Please upload a valid image file', 'error');
+    }
+
+    currentFile = file;
+    originalFileName = file.name.split('.')[0];
+    currentFormat = file.type.split('/')[1];
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        output.src = e.target.result;
+        output.style.display = 'block';
+        if(placeholderText) placeholderText.style.display = 'none';
+        
+        // Enable buttons
+        toggleButtons(false);
+        downloadBtn.disabled = false;
+        
+        notify(`✅ Loaded: ${file.name}`);
+    };
+    reader.readAsDataURL(file);
 }
 
 // ---------------------------
-// RESIZE IMAGE
+// 1. RESIZE IMAGE (Using Pica for High Quality)
 // ---------------------------
-async function resizeImage(){
-    if(!currentFile) return notify('❌ Please select an image first','error');
-    setBtnState(resizeBtn,true,'','');
-
+async function resizeImage() {
+    if(!output.src) return;
+    
     const img = new Image();
-    img.src = URL.createObjectURL(currentFile);
-    img.onload = async ()=>{
+    img.src = output.src;
+    
+    img.onload = async () => {
+        const newWidth = prompt(`Current width: ${img.width}px. Enter new width:`, img.width);
+        if(!newWidth || isNaN(newWidth)) return;
+        
+        const aspectRatio = img.height / img.width;
+        const newHeight = Math.round(newWidth * aspectRatio);
+
+        setLoading(resizeBtn, true, '', '');
+
         const canvas = document.createElement('canvas');
-        let width = parseInt(prompt("Enter new width (px)", img.width)) || img.width;
-        let height = parseInt(prompt("Enter new height (px)", img.height)) || img.height;
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = parseInt(newWidth);
+        canvas.height = newHeight;
 
         try {
-            await pica().resize(img,canvas);
-            output.src = canvas.toDataURL(`image/${currentFormat}`, currentQuality);
-            notify('✨ Image resized successfully');
-            enableDownload();
-        } catch(e){
-            notify('❌ Failed to resize image','error');
+            // Check if Pica is loaded
+            if (typeof pica === 'undefined') throw new Error("Resize library not loaded.");
+
+            const picaResizer = pica();
+            await picaResizer.resize(img, canvas);
+            
+            output.src = canvas.toDataURL(`image/${currentFormat}`);
+            notify(`✨ Resized to ${newWidth}x${newHeight}px`);
+        } catch(e) {
+            console.error(e);
+            notify('❌ Resize failed. Try reloading.', 'error');
         } finally {
-            setBtnState(resizeBtn,false,' Resize','fas fa-expand-arrows-alt');
+            setLoading(resizeBtn, false, ' Resize', 'fas fa-expand-arrows-alt');
         }
     };
 }
 
 // ---------------------------
-// COMPRESS IMAGE
+// 2. COMPRESS IMAGE
 // ---------------------------
-async function compressImage(){
-    if(!currentFile) return notify('❌ Please select an image first','error');
-    setBtnState(compressBtn,true,'','');
+function compressImage() {
+    if(!output.src) return;
+
+    const qualityInput = prompt("Enter quality (0.1 to 1.0). Lower is smaller file size.", "0.7");
+    let quality = parseFloat(qualityInput);
+    if(isNaN(quality) || quality < 0.1 || quality > 1) return notify('❌ Invalid quality', 'error');
+
+    setLoading(compressBtn, true, '', '');
 
     const img = new Image();
-    img.src = URL.createObjectURL(currentFile);
-    img.onload = ()=>{
+    img.src = output.src;
+    img.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0);
-
-        let quality = parseFloat(prompt("Enter compression quality (0.1 - 1.0)", currentQuality));
-        currentQuality = (quality >= 0.1 && quality <=1) ? quality : currentQuality;
-
-        output.src = canvas.toDataURL(`image/${currentFormat}`, currentQuality);
-        notify('✨ Image compressed successfully');
-        enableDownload();
-        setBtnState(compressBtn,false,' Compress','fas fa-compress');
+        
+        // Handle transparency for JPEGs (fill white)
+        if (currentFormat === 'jpeg' || currentFormat === 'jpg') {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        ctx.drawImage(img, 0, 0);
+        
+        output.src = canvas.toDataURL(`image/${currentFormat}`, quality);
+        notify(`✨ Compressed with quality ${quality}`);
+        setLoading(compressBtn, false, ' Compress', 'fas fa-compress');
     };
 }
 
 // ---------------------------
-// CONVERT IMAGE
+// 3. CONVERT FORMAT
 // ---------------------------
-async function convertImage(){
-    if(!currentFile) return notify('❌ Please select an image first','error');
-    setBtnState(convertBtn,true,'','');
+function convertImage() {
+    if(!output.src) return;
 
-    const format = prompt("Enter format: png / jpeg / webp", currentFormat);
-    if(!format) return setBtnState(convertBtn,false,' Convert','fas fa-exchange-alt');
+    const newFormat = prompt("Convert to: png, jpeg, or webp?", "jpeg");
+    if(!newFormat) return;
+    
+    const validFormats = ['png', 'jpeg', 'jpg', 'webp'];
+    if(!validFormats.includes(newFormat.toLowerCase())) {
+        return notify('❌ Unsupported format', 'error');
+    }
 
-    currentFormat = format.toLowerCase();
+    setLoading(convertBtn, true, '', '');
 
     const img = new Image();
-    img.src = URL.createObjectURL(currentFile);
-    img.onload = ()=>{
+    img.src = output.src;
+    img.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img,0,0);
 
-        output.src = canvas.toDataURL(`image/${currentFormat}`, currentQuality);
-        notify(`🔄 Converted to ${currentFormat}`);
-        enableDownload();
-        setBtnState(convertBtn,false,' Convert','fas fa-exchange-alt');
+        // Handle transparency if converting PNG -> JPEG
+        if (newFormat === 'jpeg' || newFormat === 'jpg') {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        ctx.drawImage(img, 0, 0);
+        
+        currentFormat = newFormat.toLowerCase();
+        output.src = canvas.toDataURL(`image/${currentFormat}`);
+        
+        notify(`🔄 Converted to ${currentFormat.toUpperCase()}`);
+        setLoading(convertBtn, false, ' Convert', 'fas fa-exchange-alt');
     };
 }
 
 // ---------------------------
-// REMOVE BACKGROUND
+// 4. REMOVE BACKGROUND (API)
 // ---------------------------
-async function removeBackground(){
-    if(!currentFile) return notify('❌ Please select an image first','error');
-    setBtnState(removeBgBtn,true,'','');
+async function removeBackground() {
+    if(!currentFile) return;
+    
+    const confirmAction = confirm("This uses a secure cloud API. Proceed?");
+    if(!confirmAction) return;
 
-    try{
+    setLoading(removeBgBtn, true, '', '');
+
+    try {
         const formData = new FormData();
         formData.append('image_file', currentFile);
 
-        // POST request to serverless endpoint (API key hidden)
-        const response = await fetch('/api/remove-bg.js', {
-            method:'POST',
+        // Call the Vercel Serverless Function
+        const response = await fetch('/api/remove-bg', {
+            method: 'POST',
             body: formData
         });
 
-        if(!response.ok) throw new Error();
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.error || 'Server Error');
+        }
+
         const blob = await response.blob();
-        output.src = URL.createObjectURL(blob);
-        notify('🪄 Background removed successfully');
-        enableDownload();
-    }catch(e){
-        notify('❌ Remove background failed. API key might be invalid or quota exceeded','error');
-    }finally{
-        setBtnState(removeBgBtn,false,' Remove Background','fas fa-magic');
+        const url = URL.createObjectURL(blob);
+        output.src = url;
+        
+        // Update format to PNG to support transparency
+        currentFormat = 'png';
+        
+        notify('🪄 Background removed successfully!');
+    } catch(e) {
+        console.error(e);
+        notify(`❌ Error: ${e.message}`, 'error');
+    } finally {
+        setLoading(removeBgBtn, false, ' Remove BG', 'fas fa-magic');
     }
 }
 
 // ---------------------------
-// EVENT LISTENERS
+// DOWNLOAD
 // ---------------------------
-if(resizeBtn) resizeBtn.addEventListener('click', resizeImage);
-if(compressBtn) compressBtn.addEventListener('click', compressImage);
-if(convertBtn) convertBtn.addEventListener('click', convertImage);
-if(removeBgBtn) removeBgBtn.addEventListener('click', removeBackground);
+downloadBtn.addEventListener('click', () => {
+    if(!output.src) return;
+    const link = document.createElement('a');
+    link.download = `${originalFileName}_edited.${currentFormat}`;
+    link.href = output.src;
+    link.click();
+    notify('📥 Downloading...');
+});
+
+// ---------------------------
+// LISTENERS
+// ---------------------------
+resizeBtn.addEventListener('click', resizeImage);
+compressBtn.addEventListener('click', compressImage);
+convertBtn.addEventListener('click', convertImage);
+removeBgBtn.addEventListener('click', removeBackground);
