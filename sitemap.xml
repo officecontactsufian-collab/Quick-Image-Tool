@@ -2,15 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://imagenova.vercel.app/</loc>
+    <lastmod>2024-01-01</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://imagenova.vercel.app/privacy.html</loc>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://imagenova.vercel.app/terms.html</loc>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://imagenova.vercel.app/contact.html</loc>
