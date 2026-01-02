@@ -1,21 +1,61 @@
-// ----------------------------
-// Elements
-// ----------------------------
+// العناصر الأساسية
 const imageInput = document.getElementById('imageInput');
 const output = document.getElementById('output');
 const downloadBtn = document.getElementById('downloadBtn');
 const message = document.getElementById('message');
+
 const resizeBtn = document.getElementById('resizeBtn');
-const removeBgBtn = document.getElementById('removeBgBtn');
 const compressBtn = document.getElementById('compressBtn');
 const convertBtn = document.getElementById('convertBtn');
-const watermarkBtn = document.getElementById('watermarkBtn');
+const removeBgBtn = document.getElementById('removeBgBtn');
 
-// ----------------------------
-// Helpers
-// ----------------------------
-function setBtnState(selector, isLoading, text, iconClass) {
-    const btn = document.querySelector(selector);
+// Default settings
+let currentFile = null;
+let currentFormat = 'png';
+let currentQuality = 0.9; // For compression
+
+// إشعار للمستخدم
+function notify(msg, type = 'success') {
+    if (!message) return;
+    message.innerText = msg;
+    message.style.color = type === 'error' ? '#ef4444' : '#10b981';
+}
+
+// تفعيل زر التحميل
+function enableDownload() {
+    if(downloadBtn) downloadBtn.disabled = !output.src;
+}
+
+// تحميل الصورة
+if(downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+        if(!output.src) return notify('❌ No image to download', 'error');
+        const a = document.createElement('a');
+        a.href = output.src;
+        a.download = `Imagenova_${Date.now()}.${currentFormat}`;
+        a.click();
+        notify('📥 Image downloaded');
+    });
+}
+
+// رفع الصورة وعرضها
+if(imageInput) {
+    imageInput.addEventListener('change', function() {
+        if (this.files[0]) {
+            currentFile = this.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                output.src = e.target.result;
+                enableDownload();
+                notify('✅ Image uploaded successfully');
+            };
+            reader.readAsDataURL(currentFile);
+        }
+    });
+}
+
+// مساعدة الزر أثناء المعالجة
+function setBtnState(btn, isLoading, text, iconClass) {
     if (!btn) return;
     const icon = btn.querySelector('i');
     const span = btn.querySelector('span');
@@ -31,192 +71,124 @@ function setBtnState(selector, isLoading, text, iconClass) {
     }
 }
 
-function notify(msg, type = 'success') {
-    if (!message) return;
-    message.innerText = msg;
-    message.style.color = type === 'error' ? '#ef4444' : '#10b981';
-}
-
-// ----------------------------
-// Load API Key (hidden)
-// ----------------------------
-async function getApiKey() {
-    try {
-        const response = await fetch('https://raw.githubusercontent.com/Soufiyan/QuickImageTool/main/API/remove-bg.js');
-        const key = await response.text();
-        return key.trim();
-    } catch {
-        notify('❌ Failed to load API Key', 'error');
-        return null;
-    }
-}
-
-// ----------------------------
-// Image Upload
-// ----------------------------
-if(imageInput) {
-    imageInput.addEventListener('change', function() {
-        if (this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                output.src = e.target.result;
-                if(downloadBtn) downloadBtn.disabled = false;
-                notify('✅ Image uploaded successfully');
-            };
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
-}
-
-// ----------------------------
-// Resize
-// ----------------------------
+/* ---------------------------
+        أداة Resize
+---------------------------- */
 async function resizeImage() {
-    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
-    setBtnState('#resizeBtn', true, '', '');
-    const width = parseInt(prompt('Enter width in px:', '800')) || 800;
-    const height = parseInt(prompt('Enter height in px:', '800')) || 800;
+    if(!currentFile) return notify('❌ Please select an image first', 'error');
+    setBtnState(resizeBtn, true, '', '');
 
     const img = new Image();
-    img.src = URL.createObjectURL(imageInput.files[0]);
+    img.src = URL.createObjectURL(currentFile);
     img.onload = async () => {
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+
+        // طلب المستخدم للأبعاد
+        const width = prompt("Enter new width (px)", img.width);
+        const height = prompt("Enter new height (px)", img.height);
+
+        canvas.width = width || img.width;
+        canvas.height = height || img.height;
+
         try {
             await pica().resize(img, canvas);
-            output.src = canvas.toDataURL();
+            output.src = canvas.toDataURL(currentFormat, currentQuality);
             notify('✨ Image resized successfully');
-        } catch {
+            enableDownload();
+        } catch(e) {
             notify('❌ Failed to resize image', 'error');
         } finally {
-            setBtnState('#resizeBtn', false, ' Resize', 'fas fa-expand-arrows-alt');
+            setBtnState(resizeBtn, false, ' Resize', 'fas fa-expand-arrows-alt');
         }
     };
 }
 
-// ----------------------------
-// Remove Background
-// ----------------------------
+/* ---------------------------
+        أداة Compress
+---------------------------- */
+async function compressImage() {
+    if(!currentFile) return notify('❌ Please select an image first', 'error');
+    setBtnState(compressBtn, true, '', '');
+
+    const img = new Image();
+    img.src = URL.createObjectURL(currentFile);
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img,0,0);
+
+        // طلب الجودة من المستخدم
+        const quality = prompt("Enter compression quality (0.1 to 1.0)", currentQuality);
+        currentQuality = parseFloat(quality) || currentQuality;
+
+        output.src = canvas.toDataURL(currentFormat, currentQuality);
+        notify('✨ Image compressed successfully');
+        enableDownload();
+        setBtnState(compressBtn, false, ' Compress', 'fas fa-compress');
+    };
+}
+
+/* ---------------------------
+        أداة Convert
+---------------------------- */
+async function convertImage() {
+    if(!currentFile) return notify('❌ Please select an image first', 'error');
+    setBtnState(convertBtn, true, '', '');
+
+    const format = prompt("Enter format: png / jpeg / webp", currentFormat);
+    if(!format) return setBtnState(convertBtn, false, ' Convert', 'fas fa-exchange-alt');
+
+    currentFormat = format.toLowerCase();
+
+    const img = new Image();
+    img.src = URL.createObjectURL(currentFile);
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img,0,0);
+
+        output.src = canvas.toDataURL(currentFormat, currentQuality);
+        notify(`🔄 Converted to ${currentFormat}`);
+        enableDownload();
+        setBtnState(convertBtn, false, ' Convert', 'fas fa-exchange-alt');
+    };
+}
+
+/* ---------------------------
+        أداة Remove Background
+---------------------------- */
 async function removeBackground() {
-    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
-    setBtnState('#removeBgBtn', true, '', '');
+    if(!currentFile) return notify('❌ Please select an image first', 'error');
+    setBtnState(removeBgBtn, true, '', '');
 
     try {
-        const API_KEY = await getApiKey();
-        if (!API_KEY) throw new Error('No API Key');
-
         const formData = new FormData();
-        formData.append('image_file', imageInput.files[0]);
-        formData.append('size', 'auto');
+        formData.append('image_file', currentFile);
 
-        const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-            method: 'POST',
-            headers: { 'X-Api-Key': API_KEY },
+        // طلب API key من ملف خارجي
+        const response = await fetch('/api/remove-bg.js', {
+            method:'POST',
             body: formData
         });
 
-        if (!response.ok) throw new Error('API error or quota exceeded');
+        if(!response.ok) throw new Error();
         const blob = await response.blob();
         output.src = URL.createObjectURL(blob);
         notify('🪄 Background removed successfully');
-    } catch (e) {
-        console.error(e);
-        notify('❌ Failed to remove background', 'error');
+        enableDownload();
+    } catch(e) {
+        notify('❌ Remove background failed', 'error');
     } finally {
-        setBtnState('#removeBgBtn', false, ' Remove Background', 'fas fa-magic');
+        setBtnState(removeBgBtn, false, ' Remove Background', 'fas fa-magic');
     }
 }
 
-// ----------------------------
-// Compress
-// ----------------------------
-async function compressImage() {
-    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
-    setBtnState('#compressBtn', true, '', '');
-    const quality = parseFloat(prompt('Enter quality (0.1 to 1):', '0.8')) || 0.8;
-
-    const img = new Image();
-    img.src = URL.createObjectURL(imageInput.files[0]);
-    img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        output.src = canvas.toDataURL('image/jpeg', quality);
-        notify(`🔧 Image compressed to ${Math.round(quality*100)}% quality`);
-        setBtnState('#compressBtn', false, ' Compress', 'fas fa-compress');
-    };
-}
-
-// ----------------------------
-// Convert
-// ----------------------------
-function convertImage() {
-    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
-    setBtnState('#convertBtn', true, '', '');
-    const format = prompt('Enter format (jpg/png/webp):', 'png').toLowerCase() || 'png';
-
-    const img = new Image();
-    img.src = output.src || URL.createObjectURL(imageInput.files[0]);
-    img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        output.src = canvas.toDataURL(`image/${format}`);
-        notify(`🔄 Image converted to ${format.toUpperCase()}`);
-        setBtnState('#convertBtn', false, ' Convert', 'fas fa-exchange-alt');
-    };
-}
-
-// ----------------------------
-// Add Watermark
-// ----------------------------
-function addWatermark() {
-    if (!imageInput.files[0]) return notify('❌ Please select an image first', 'error');
-    setBtnState('#watermarkBtn', true, '', '');
-
-    const watermark = prompt('Enter watermark text:', '© Imagenova') || '© Imagenova';
-    const img = new Image();
-    img.src = output.src || URL.createObjectURL(imageInput.files[0]);
-    img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        ctx.font = `${Math.round(img.width/20)}px Arial`;
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.textAlign = 'right';
-        ctx.fillText(watermark, img.width-10, img.height-10);
-        output.src = canvas.toDataURL();
-        notify('💧 Watermark added successfully');
-        setBtnState('#watermarkBtn', false, ' Watermark', 'fas fa-water');
-    };
-}
-
-// ----------------------------
-// Download
-// ----------------------------
-if(downloadBtn) {
-    downloadBtn.addEventListener('click', () => {
-        if(!output.src) return notify('❌ No image to download', 'error');
-        const a = document.createElement('a');
-        a.href = output.src;
-        a.download = `Imagenova_${Date.now()}.png`;
-        a.click();
-        notify('📥 Image downloaded');
-    });
-}
-
-// ----------------------------
-// Bind Buttons
-// ----------------------------
+// ربط الأزرار
 if(resizeBtn) resizeBtn.addEventListener('click', resizeImage);
-if(removeBgBtn) removeBgBtn.addEventListener('click', removeBackground);
 if(compressBtn) compressBtn.addEventListener('click', compressImage);
 if(convertBtn) convertBtn.addEventListener('click', convertImage);
-if(watermarkBtn) watermarkBtn.addEventListener('click', addWatermark);
+if(removeBgBtn) removeBgBtn.addEventListener('click', removeBackground);
