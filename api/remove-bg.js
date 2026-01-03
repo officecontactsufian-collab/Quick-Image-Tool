@@ -2,7 +2,6 @@
 import { IncomingForm } from 'formidable';
 import FormData from 'form-data';
 import fs from 'fs';
-import fetch from 'node-fetch';
 
 export const config = {
   api: {
