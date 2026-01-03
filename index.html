@@ -58,7 +58,15 @@
         <input type="range" id="compressQuality" min="10" max="100" value="70">
         <button class="btn btn-success" id="compressBtn" disabled><i class="fas fa-compress"></i><span> Compress</span></button>
       </div>
-      <button class="btn btn-warning" id="convertBtn" title="Convert to PNG, JPEG, or WebP" disabled><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
+      <div class="convert-controls">
+  <label for="convertFormat">Convert to:</label>
+  <select id="convertFormat">
+    <option value="png">PNG</option>
+    <option value="jpeg" selected>JPEG</option>
+    <option value="webp">WebP</option>
+  </select>
+  <button class="btn btn-warning" id="convertBtn"><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
+      </div>
       <button class="btn btn-danger" id="removeBgBtn" title="Remove Background using AI" disabled><i class="fas fa-magic"></i><span> Remove BG</span></button>
       <button class="btn btn-info full-width" id="downloadBtn" title="Download your result" disabled><i class="fas fa-download"></i><span> Download Result</span></button>
     </div>
