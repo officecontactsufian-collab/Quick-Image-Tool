@@ -2,10 +2,11 @@
 import { IncomingForm } from 'formidable';
 import FormData from 'form-data';
 import fs from 'fs';
+import fetch from 'node-fetch';
 
 export const config = {
   api: {
-    bodyParser: false, // مهم لإستقبال الملفات
+    bodyParser: false,
   },
 };
 
@@ -15,7 +16,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // إعداد Formidable لرفع الملفات
     const form = new IncomingForm({
       keepExtensions: true,
       maxFileSize: 10 * 1024 * 1024, // 10MB
@@ -37,10 +37,9 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.REMOVE_BG_API_KEY;
     if (!apiKey) {
-      throw new Error('API Key is missing in Environment Variables');
+      return res.status(500).json({ error: 'API Key missing' });
     }
 
-    // تجهيز FormData للإرسال لـ Remove.bg
     const formData = new FormData();
     formData.append('size', 'auto');
     formData.append('image_file', fs.createReadStream(uploadedFile.filepath));
@@ -54,19 +53,18 @@ export default async function handler(req, res) {
       body: formData,
     });
 
-if (!response.ok) {
-  const text = await response.text();
-  console.error(text);
-  return res.status(500).json({ error: "Remove.bg failed" });
-}
+    if (!response.ok) {
+      const text = await response.text();
+      console.error(text);
+      return res.status(500).json({ error: 'Remove.bg failed' });
+    }
 
-    // تحويل الصورة المستلمة إلى Buffer وإرسالها للمتصفح
     const buffer = await response.arrayBuffer();
     res.setHeader('Content-Type', 'image/png');
     res.status(200).send(Buffer.from(buffer));
 
   } catch (error) {
     console.error('Server Error:', error);
-    res.status(500).json({ error: error.message || 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
