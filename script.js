@@ -95,23 +95,35 @@ compressBtn.addEventListener('click',()=>{
 });
 
 // Convert
-convertBtn.addEventListener('click',()=>{
-    if(!output.src) return;
-    const format=prompt('Convert to: png, jpeg, webp','jpeg');
-    if(!format) return;
-    const img=new Image();
-    img.src=output.src;
-    img.onload=()=>{
-        const canvas=document.createElement('canvas');
-        canvas.width=img.width; canvas.height=img.height;
-        const ctx=canvas.getContext('2d');
-        if(format.includes('jp')){ctx.fillStyle='#FFF';ctx.fillRect(0,0,canvas.width,canvas.height);}
-        ctx.drawImage(img,0,0);
-        currentFormat=format.toLowerCase();
-        output.src=canvas.toDataURL(`image/${currentFormat}`);
+function convertImage() {
+    if (!output.src) return;
+
+    const formatSelect = document.getElementById('convertFormat');
+    const format = formatSelect ? formatSelect.value : 'jpeg';
+    if (!format) return;
+
+    setLoading(convertBtn, true, '', '');
+    const img = new Image();
+    img.src = output.src;
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+
+        // دعم الشفافية للصيغ PNG/WebP
+        if (format === 'jpeg') {
+            ctx.fillStyle = "#FFF";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        ctx.drawImage(img, 0, 0);
+        currentFormat = format.toLowerCase();
+        output.src = canvas.toDataURL(`image/${currentFormat}`);
         notify(`🔄 Converted to ${currentFormat}`);
+        setLoading(convertBtn, false, ' Convert', 'fas fa-exchange-alt');
     };
-});
+}
 
 // Remove BG
 removeBgBtn.addEventListener('click',async()=>{
