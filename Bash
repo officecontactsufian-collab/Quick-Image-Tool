@@ -1,1 +1,3 @@
 cd Desktop/imagenova
+npm install
+vercel --prod
