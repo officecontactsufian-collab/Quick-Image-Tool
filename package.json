@@ -4,7 +4,6 @@
   "description": "Image processing tools",
   "type": "module",
   "dependencies": {
-    "node-fetch": "^3.3.0",
     "formidable": "^3.5.1",
     "form-data": "^4.0.0"
   }
