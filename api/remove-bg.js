@@ -55,11 +55,11 @@ export default async function handler(req, res) {
       body: formData,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Remove.bg API Error:', errorText);
-      return res.status(response.status).json({ error: 'Failed to process image with provider' });
-    }
+if (!response.ok) {
+  const text = await response.text();
+  console.error(text);
+  return res.status(500).json({ error: "Remove.bg failed" });
+}
 
     // تحويل الصورة المستلمة إلى Buffer وإرسالها للمتصفح
     const buffer = await response.arrayBuffer();
