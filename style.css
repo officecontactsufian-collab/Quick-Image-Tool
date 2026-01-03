@@ -114,20 +114,23 @@ a:hover {
 }
 
 .resize-inputs,
-.compress-controls {
+.convert-controls {
   display: flex;
   gap: 10px;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.resize-inputs input,
-.compress-controls input[type="range"] {
-  padding: 8px;
+.convert-controls select {
+  padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid #d1d5db;
-  width: 100px;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  background: white;
+  color: var(--text-dark);
 }
 
 .btn {
