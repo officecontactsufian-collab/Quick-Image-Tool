@@ -218,32 +218,29 @@ async function removeBackground() {
     setLoading(removeBgBtn, true, '', '');
 
     try {
-        // ⚠️ تحضير الصورة (تصغير تلقائي إذا كبيرة)
-        const optimizedFile = await prepareImageForAPI(currentFile);
-
         const formData = new FormData();
-        formData.append('image_file', optimizedFile);
-        formData.append('size', 'auto');
+        formData.append('image_file', currentFile);
 
         const response = await fetch('/api/remove-bg', {
             method: 'POST',
-            body: formData // ✅ مهم: بلا headers
+            body: formData // ❗ بلا headers
         });
 
         if (!response.ok) {
-            throw new Error('Remove BG failed');
+            const errText = await response.text();
+            throw new Error(errText || 'Remove BG failed');
         }
 
-        const blob = await response.blob();
+        const blob = await response.blob(); // ✅ مهم
         const url = URL.createObjectURL(blob);
 
         output.src = url;
         currentFormat = 'png';
-
         notify('✨ Background removed successfully');
 
     } catch (e) {
-        notify(`❌ ${e.message}`, 'error');
+        console.error(e);
+        notify('❌ Failed to remove background', 'error');
     } finally {
         setLoading(removeBgBtn, false, ' Remove BG', 'fas fa-magic');
     }
