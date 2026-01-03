@@ -20,7 +20,6 @@
    GLOBAL
 --------------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   background: var(--bg-gradient);
@@ -29,7 +28,6 @@ body {
   padding: 20px;
   line-height: 1.6;
 }
-
 a { color: var(--primary); text-decoration: none; transition: 0.2s; }
 a:hover { color: var(--primary-hover); text-decoration: underline; }
 
@@ -103,6 +101,7 @@ a:hover { color: var(--primary-hover); text-decoration: underline; }
   gap: 10px;
   transition: all 0.2s;
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  position: relative;
 }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; filter: grayscale(100%); }
 .btn:active:not(:disabled) { transform: scale(0.98); }
@@ -121,6 +120,34 @@ a:hover { color: var(--primary-hover); text-decoration: underline; }
 
 .btn-info { background: var(--primary); color: white; }
 .btn-info:hover:not(:disabled) { background: var(--primary-hover); }
+
+/* ---------------------------
+   INPUTS & PROGRESS
+--------------------------- */
+input[type="number"], select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+input[type="number"]:focus, select:focus { border-color: var(--primary); outline: none; }
+
+.progress-container {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
 
 /* ---------------------------
    IMAGE PREVIEW
@@ -146,6 +173,7 @@ a:hover { color: var(--primary-hover); text-decoration: underline; }
   border-radius: 8px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
+#placeholderText { color: #aaa; }
 
 /* ---------------------------
    MESSAGES & TEXT
@@ -165,17 +193,6 @@ a:hover { color: var(--primary-hover); text-decoration: underline; }
 .seo-text p { color: var(--text-light); font-size: 0.95rem; margin-top: 5px; }
 
 /* ---------------------------
-   FORMS
---------------------------- */
-form { text-align: left; }
-form label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--text-dark); }
-form input, form textarea {
-  width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; margin-bottom: 20px; font-family: inherit;
-  transition: border 0.2s;
-}
-form input:focus, form textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
-
-/* ---------------------------
    FOOTER
 --------------------------- */
 .footer-center {
@@ -187,6 +204,9 @@ form input:focus, form textarea:focus { outline: none; border-color: var(--prima
 .footer-links a { margin: 0 10px; color: var(--text-light); }
 .footer-copy { margin-top: 15px; font-size: 0.85rem; color: #9ca3af; }
 
+/* ---------------------------
+   RESPONSIVE
+--------------------------- */
 @media (max-width: 600px){
   .controls-section { grid-template-columns: 1fr; }
   .full-width { grid-column: span 1; }
