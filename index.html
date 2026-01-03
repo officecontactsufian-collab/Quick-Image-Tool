@@ -14,16 +14,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Imagenova – Resize, Compress, Convert & Remove Background</title>
-  <meta name="description" content="Free online image tool to resize, compress, convert formats (PNG, JPG, WebP) and remove backgrounds instantly. Secure and fast.">
-  <meta name="keywords" content="image resize, compress image, convert image, remove background, online photo editor, webp converter">
-  <meta name="author" content="SOUFIYAN IGUIDER">
-  <link rel="canonical" href="https://imagenova.vercel.app/">
-  
-  <!-- Styles & Icons -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pica/9.0.1/pica.min.js"></script>
   <script src="script.js" defer></script>
 </head>
@@ -42,21 +34,65 @@
   </header>
 
   <section class="tool-section">
-    <label class="upload-label" for="imageInput" id="dropZone">
+    <label class="upload-label" id="dropZone">
       <i class="fas fa-cloud-upload-alt fa-3x"></i>
       <span>Click or Drag & Drop Image Here</span>
       <input type="file" id="imageInput" accept="image/png, image/jpeg, image/webp" hidden>
     </label>
 
     <div class="controls-section">
-      <button class="btn btn-secondary" id="resizeBtn" disabled><i class="fas fa-expand-arrows-alt"></i><span> Resize</span></button>
-      <button class="btn btn-success" id="compressBtn" disabled><i class="fas fa-compress"></i><span> Compress</span></button>
-      <button class="btn btn-warning" id="convertBtn" disabled><i class="fas fa-exchange-alt"></i><span> Convert</span></button>
-      <button class="btn btn-danger" id="removeBgBtn" disabled><i class="fas fa-magic"></i><span> Remove BG</span></button>
-      <button class="btn btn-info full-width" id="downloadBtn" disabled><i class="fas fa-download"></i><span> Download Result</span></button>
+
+      <!-- Resize -->
+      <div class="tool-group">
+        <label>Width (px): <input type="number" id="resizeWidth" min="1"></label>
+        <label>Height (px): <input type="number" id="resizeHeight" min="1"></label>
+        <button class="btn btn-secondary" id="resizeBtn" disabled>
+          <i class="fas fa-expand-arrows-alt"></i><span> Resize</span>
+        </button>
+        <div class="progress-bar"><div id="resizeProgress"></div></div>
+      </div>
+
+      <!-- Compress -->
+      <div class="tool-group">
+        <label>Quality: <input type="range" id="compressQuality" min="0.1" max="1" step="0.01" value="0.7"></label>
+        <label>Format: 
+          <select id="compressFormat">
+            <option value="jpeg">JPEG</option>
+            <option value="png">PNG</option>
+          </select>
+        </label>
+        <button class="btn btn-success" id="compressBtn" disabled>
+          <i class="fas fa-compress"></i><span> Compress</span>
+        </button>
+        <div class="progress-bar"><div id="compressProgress"></div></div>
+      </div>
+
+      <!-- Convert -->
+      <div class="tool-group">
+        <label>Convert to: 
+          <select id="convertFormat">
+            <option value="jpeg">JPEG</option>
+            <option value="png">PNG</option>
+            <option value="webp">WebP</option>
+          </select>
+        </label>
+        <button class="btn btn-warning" id="convertBtn" disabled>
+          <i class="fas fa-exchange-alt"></i><span> Convert</span>
+        </button>
+        <div class="progress-bar"><div id="convertProgress"></div></div>
+      </div>
+
+      <!-- Remove BG -->
+      <button class="btn btn-danger" id="removeBgBtn" disabled>
+        <i class="fas fa-magic"></i><span> Remove BG</span>
+      </button>
+
+      <!-- Download -->
+      <button class="btn btn-info full-width" id="downloadBtn" disabled>
+        <i class="fas fa-download"></i><span> Download Result</span>
+      </button>
     </div>
 
-    <!-- Feedback Message -->
     <p id="message" class="status-message"></p>
 
     <div class="image-wrapper">
@@ -64,35 +100,6 @@
       <div id="placeholderText" style="color: #aaa;">No image selected</div>
     </div>
   </section>
-
-  <section class="seo-text">
-    <article>
-      <h2>Resize Images Online</h2>
-      <p>Change image dimensions (width/height) quickly without losing significant quality.</p>
-    </article>
-    <article>
-      <h2>Compress Images</h2>
-      <p>Reduce file size for faster website loading or social media sharing.</p>
-    </article>
-    <article>
-      <h2>Convert Formats</h2>
-      <p>Switch between PNG, JPEG, and WebP formats instantly.</p>
-    </article>
-    <article>
-      <h2>Remove Background</h2>
-      <p>AI-powered background removal. Your images are processed securely.</p>
-    </article>
-  </section>
 </main>
-
-<footer class="footer-center">
-  <nav class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Service</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <p class="footer-copy">© 2026 Imagenova – Developed by SOUFIYAN IGUIDER</p>
-</footer>
 </body>
 </html>
